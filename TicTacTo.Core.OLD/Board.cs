@@ -15,24 +15,24 @@ namespace TicTacTo.Core
         /// Describes the various win conditions for end game lookup
         /// Each sub array contains the indicies for a row, column, or diagonal on a 3 x 3 board.
         /// </summary>
-        private readonly int[][] winConditions =
-        [
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6]
-        ];
+        private int[][] winConditions = new int[8][]
+        {
+            new int[3] {0, 1, 2 },
+            new int[3] {3, 4, 5 },
+            new int[3] {6, 7, 8 },
+            new int[3] {0, 3, 6 },
+            new int[3] {1, 4, 7 },
+            new int[3] {2, 5, 8 },
+            new int[3] {0, 4, 8 },
+            new int[3] {2, 4, 6 }
+        };
         /// <summary>
         /// Current state of the game board.
         /// Initialized to -1 in all positions.
         /// Empty = -1, 'X' = 0, 'O' = 1
         /// Read Only
         /// </summary>
-        public int[] Positions { get; } = [-1, -1, -1, -1, -1, -1, -1, -1, -1];
+        public int[] Positions { get; } = new int[9] { -1, -1, -1, -1, -1, -1, -1, -1, -1 };
 
         /// <summary>
         /// Updates the current positions of the board according to what the player chooses.
