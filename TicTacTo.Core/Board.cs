@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TicTacTo.Core
+﻿namespace TicTacTo.Core
 {
     /// <summary>
     /// 
@@ -52,7 +46,7 @@ namespace TicTacTo.Core
         /// <returns>-1 if no win was found, 0 if Player 1 'X' won, 1 if player 2 'O' won. 2 if stalemate</returns>
         public int CheckWin()
         {
-            foreach(var condition in winConditions)
+            foreach (var condition in winConditions)
             {
                 if (Positions[condition[0]] == Positions[condition[1]] && Positions[condition[0]] == Positions[condition[2]])
                     return Positions[condition[0]];
@@ -62,7 +56,7 @@ namespace TicTacTo.Core
             foreach (var position in Positions)
                 stalemate = position != -1 && stalemate;
 
-            return stalemate? 2: -1;
+            return stalemate ? 2 : -1;
         }
     }
 }

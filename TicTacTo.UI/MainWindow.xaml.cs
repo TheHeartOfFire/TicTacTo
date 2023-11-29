@@ -1,14 +1,6 @@
-﻿using System.Reflection;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using TicTacTo.Core;
 
 namespace TicTacTo.UI;
@@ -19,10 +11,31 @@ public partial class MainWindow : Window
 {
     private Board game = new();
     private bool player1 = true;
+    private readonly Button[] buttons;
+    private readonly Image[] images;
 
     public MainWindow()
     {
         InitializeComponent();
+        buttons = [btnPos0,
+            btnPos1,
+            btnPos2,
+            btnPos3,
+            btnPos4,
+            btnPos5,
+            btnPos6,
+            btnPos7,
+            btnPos8];
+        images = [imgPos0,
+            imgPos1,
+            imgPos2,
+            imgPos3,
+            imgPos4,
+            imgPos5,
+            imgPos6,
+            imgPos7,
+            imgPos8];
+
     }
 
     private void GameOver()
@@ -31,151 +44,63 @@ public partial class MainWindow : Window
         if (winner < 0) return;
         lblDisplay.Content = "Winner";
 
-        string img = "Assets\\Ladybug.png";
-        if (winner == 1) img = "Assets\\Bee.png";
-        if (winner == 2) img = "Assets\\Bird.png";
+        string img = Properties.Resources.Ladybug;
+        if (winner == 1) img = Properties.Resources.Butterfly;
+        if (winner == 2) img = Properties.Resources.Bird;
 
 
         imgIndicator.Source = new BitmapImage(new Uri(img, UriKind.Relative));
-        btnPos0.Visibility = Visibility.Hidden;
-        btnPos1.Visibility = Visibility.Hidden;
-        btnPos2.Visibility = Visibility.Hidden;
-        btnPos3.Visibility = Visibility.Hidden;
-        btnPos4.Visibility = Visibility.Hidden;
-        btnPos5.Visibility = Visibility.Hidden;
-        btnPos6.Visibility = Visibility.Hidden;
-        btnPos7.Visibility = Visibility.Hidden;
-        btnPos8.Visibility = Visibility.Hidden;
+
+        foreach (var button in buttons) button.Visibility = Visibility.Hidden;
+
         btnReset.Visibility = Visibility.Visible;
     }
 
     private void UpdatePlayer()
     {
         player1 = !player1;
-        imgIndicator.Source = new BitmapImage(new Uri(player1?"Assets\\Ladybug.png":"Assets\\Bee.png", UriKind.Relative));
-
-
+        BitmapImage img = new BitmapImage(new Uri(player1 ? Properties.Resources.Ladybug : Properties.Resources.Butterfly, UriKind.Relative));
+        imgIndicator.Source = img;
     }
 
-
-
-    private void btnPos0_Click(object sender, RoutedEventArgs e)
+    private void TakeTurn(Image img, Button btn, int pos)
     {
-        game.TakeTurn(player1 ? 0 : 1, 0);
-        imgPos0.Source = new BitmapImage(new Uri(player1 ? "Assets\\Ladybug.png" : "Assets\\Bee.png", UriKind.Relative));
+        game.TakeTurn(player1 ? 0 : 1, pos);
+        img.Source = new BitmapImage(new Uri(player1 ? Properties.Resources.Ladybug : Properties.Resources.Butterfly, UriKind.Relative));
 
-        btnPos0.IsEnabled = false;
-        UpdatePlayer();
-        GameOver(); 
-    }
-
-    private void btnPos1_Click(object sender, RoutedEventArgs e)
-    {
-        game.TakeTurn(player1 ? 0 : 1, 1); 
-        imgPos1.Source = new BitmapImage(new Uri(player1 ? "Assets\\Ladybug.png" : "Assets\\Bee.png", UriKind.Relative));
-
-        btnPos1.IsEnabled = false;
+        btn.IsEnabled = false;
         UpdatePlayer();
         GameOver();
     }
 
-    private void btnPos2_Click(object sender, RoutedEventArgs e)
-    {
-        game.TakeTurn(player1 ? 0 : 1, 2);
-        imgPos2.Source = new BitmapImage(new Uri(player1 ? "Assets\\Ladybug.png" : "Assets\\Bee.png", UriKind.Relative));
-        btnPos2.IsEnabled = false;
-        UpdatePlayer();
-        GameOver();
-    }
 
-    private void btnPos3_Click(object sender, RoutedEventArgs e)
-    {
-        game.TakeTurn(player1 ? 0 : 1, 3);
-        imgPos3.Source = new BitmapImage(new Uri(player1 ? "Assets\\Ladybug.png" : "Assets\\Bee.png", UriKind.Relative));
-        btnPos3.IsEnabled = false;
-        UpdatePlayer();
-        GameOver();
-    }
 
-    private void btnPos4_Click(object sender, RoutedEventArgs e)
-    {
-        game.TakeTurn(player1 ? 0 : 1, 4);
-        imgPos4.Source = new BitmapImage(new Uri(player1 ? "Assets\\Ladybug.png" : "Assets\\Bee.png", UriKind.Relative));
-        btnPos4.IsEnabled = false;
-        UpdatePlayer();
-        GameOver();
-    }
-
-    private void btnPos5_Click(object sender, RoutedEventArgs e)
-    {
-        game.TakeTurn(player1 ? 0 : 1, 5);
-        imgPos5.Source = new BitmapImage(new Uri(player1 ? "Assets\\Ladybug.png" : "Assets\\Bee.png", UriKind.Relative));
-        btnPos5.IsEnabled = false;
-        UpdatePlayer();
-        GameOver();
-    }
-
-    private void btnPos6_Click(object sender, RoutedEventArgs e)
-    {
-        game.TakeTurn(player1 ? 0 : 1, 6);
-        imgPos6.Source = new BitmapImage(new Uri(player1 ? "Assets\\Ladybug.png" : "Assets\\Bee.png", UriKind.Relative));
-        btnPos6.IsEnabled = false;
-        UpdatePlayer();
-        GameOver();
-    }
-
-    private void btnPos7_Click(object sender, RoutedEventArgs e)
-    {
-        game.TakeTurn(player1 ? 0 : 1, 7);
-        imgPos7.Source = new BitmapImage(new Uri(player1 ? "Assets\\Ladybug.png" : "Assets\\Bee.png", UriKind.Relative));
-        btnPos7.IsEnabled = false;
-        UpdatePlayer();
-        GameOver();
-    }
-
-    private void btnPos8_Click(object sender, RoutedEventArgs e)
-    {
-        game.TakeTurn(player1 ? 0 : 1, 8);
-        imgPos8.Source = new BitmapImage(new Uri(player1 ? "Assets\\Ladybug.png" : "Assets\\Bee.png", UriKind.Relative));
-        btnPos8.IsEnabled = false;
-        UpdatePlayer();
-        GameOver();
-    }
-
+    private void btnPos0_Click(object sender, RoutedEventArgs e) => TakeTurn(imgPos0, btnPos0, 0);
+    private void btnPos1_Click(object sender, RoutedEventArgs e) => TakeTurn(imgPos1, btnPos1, 1);
+    private void btnPos2_Click(object sender, RoutedEventArgs e) => TakeTurn(imgPos2, btnPos2, 2);
+    private void btnPos3_Click(object sender, RoutedEventArgs e) => TakeTurn(imgPos3, btnPos3, 3);
+    private void btnPos4_Click(object sender, RoutedEventArgs e) => TakeTurn(imgPos4, btnPos4, 4);
+    private void btnPos5_Click(object sender, RoutedEventArgs e) => TakeTurn(imgPos5, btnPos5, 5);
+    private void btnPos6_Click(object sender, RoutedEventArgs e) => TakeTurn(imgPos6, btnPos6, 6);
+    private void btnPos7_Click(object sender, RoutedEventArgs e) => TakeTurn(imgPos7, btnPos7, 7);
+    private void btnPos8_Click(object sender, RoutedEventArgs e) => TakeTurn(imgPos8, btnPos8, 8);
     private void btnReset_Click(object sender, RoutedEventArgs e)
     {
         btnReset.Visibility = Visibility.Hidden;
-        btnPos0.Visibility = Visibility.Visible;
-        btnPos1.Visibility = Visibility.Visible;
-        btnPos2.Visibility = Visibility.Visible;
-        btnPos3.Visibility = Visibility.Visible;
-        btnPos4.Visibility = Visibility.Visible;
-        btnPos5.Visibility = Visibility.Visible;
-        btnPos6.Visibility = Visibility.Visible;
-        btnPos7.Visibility = Visibility.Visible;
-        btnPos8.Visibility = Visibility.Visible;
-        btnPos0.IsEnabled = true;
-        btnPos1.IsEnabled = true;
-        btnPos2.IsEnabled = true;
-        btnPos3.IsEnabled = true;
-        btnPos4.IsEnabled = true;
-        btnPos5.IsEnabled = true;
-        btnPos6.IsEnabled = true;
-        btnPos7.IsEnabled = true;
-        btnPos8.IsEnabled = true;
-        btnPos0.Content = "";
-        btnPos1.Content = "";
-        btnPos2.Content = "";
-        btnPos3.Content = "";
-        btnPos4.Content = "";
-        btnPos5.Content = "";
-        btnPos6.Content = "";
-        btnPos7.Content = "";
-        btnPos8.Content = "";
-        lblDisplay.Content = "Turn"; 
-        imgIndicator.Source = new BitmapImage(new Uri("Assets\\Ladybug.png", UriKind.Relative));
+
+        foreach (var btn in buttons)
+        {
+
+            btn.Visibility = Visibility.Visible;
+            btn.IsEnabled = true;
+        }
+        foreach (var img in images) img.Source = null;
+
+        lblDisplay.Content = "Turn";
+        imgIndicator.Source = new BitmapImage(new Uri(Properties.Resources.Ladybug, UriKind.Relative));
 
         game = new();
         player1 = true;
     }
+
 }
