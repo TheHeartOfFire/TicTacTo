@@ -61,29 +61,83 @@ namespace TicTacTo.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assets\Bird.png.
+        ///   Looks up a localized string similar to Assets\Themes\Bug\Background.png.
         /// </summary>
-        internal static string Bird {
+        internal static string Bug_Background {
             get {
-                return ResourceManager.GetString("Bird", resourceCulture);
+                return ResourceManager.GetString("Bug_Background", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assets\Bee.png.
+        ///   Looks up a localized string similar to Assets\Themes\Bug\HorizontalDivider.png.
         /// </summary>
-        internal static string Butterfly {
+        internal static string Bug_HorizontalDivider {
             get {
-                return ResourceManager.GetString("Butterfly", resourceCulture);
+                return ResourceManager.GetString("Bug_HorizontalDivider", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assets\Ladybug.png.
+        ///   Looks up a localized string similar to Assets\Themes\Bug\Player1.png.
         /// </summary>
-        internal static string Ladybug {
+        internal static string Bug_Player1 {
             get {
-                return ResourceManager.GetString("Ladybug", resourceCulture);
+                return ResourceManager.GetString("Bug_Player1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assets\Themes\Bug\Player1.cur.
+        /// </summary>
+        internal static string Bug_Player1Cursor {
+            get {
+                return ResourceManager.GetString("Bug_Player1Cursor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assets\Themes\Bug\Player2.png.
+        /// </summary>
+        internal static string Bug_Player2 {
+            get {
+                return ResourceManager.GetString("Bug_Player2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assets\Themes\Bug\Player2.cur.
+        /// </summary>
+        internal static string Bug_Player2Cursor {
+            get {
+                return ResourceManager.GetString("Bug_Player2Cursor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assets\Themes\Bug\Reset.png.
+        /// </summary>
+        internal static string Bug_Reset {
+            get {
+                return ResourceManager.GetString("Bug_Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assets\Themes\Bug\Stalemate.png.
+        /// </summary>
+        internal static string Bug_Stalemate {
+            get {
+                return ResourceManager.GetString("Bug_Stalemate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assets\Themes\Bug\VerticalDivider.png.
+        /// </summary>
+        internal static string Bug_VerticalDivider {
+            get {
+                return ResourceManager.GetString("Bug_VerticalDivider", resourceCulture);
             }
         }
     }

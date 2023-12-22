@@ -1,7 +1,10 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using TicTacTo.Core;
+using static TicTacTo.UI.ThemeManager;
 
 namespace TicTacTo.UI;
 /// <summary>
@@ -13,60 +16,66 @@ public partial class MainWindow : Window
     private bool player1 = true;
     private readonly Button[] buttons;
     private readonly Image[] images;
+    private readonly Image[] verticalDividers;
+    private readonly Image[] horizontalDividers;
+    private ThemeManager theme;
 
     public MainWindow()
     {
         InitializeComponent();
-        buttons = [btnPos0,
-            btnPos1,
-            btnPos2,
-            btnPos3,
-            btnPos4,
-            btnPos5,
-            btnPos6,
-            btnPos7,
-            btnPos8];
-        images = [imgPos0,
-            imgPos1,
-            imgPos2,
-            imgPos3,
-            imgPos4,
-            imgPos5,
-            imgPos6,
-            imgPos7,
-            imgPos8];
-
+        buttons = [btnPos0, btnPos1, btnPos2,
+                   btnPos3, btnPos4, btnPos5,
+                   btnPos6, btnPos7, btnPos8];
+        images = [imgPos0, imgPos1, imgPos2,
+                  imgPos3, imgPos4, imgPos5,
+                  imgPos6, imgPos7, imgPos8];
+        verticalDividers = [ imgVerticalDivider0, imgVerticalDivider1, imgVerticalDivider2, imgVerticalDivider3];
+        horizontalDividers = [ imgHorizontalDivider0, imgHorizontalDivider1, imgHorizontalDivider2, imgHorizontalDivider3];
+        ChangeTheme(Theme.BUG);
     }
 
     private void GameOver()
     {
         var winner = game.CheckWin();
-        if (winner < 0) return;
-        lblDisplay.Content = "Winner";
+        if (winner.Winner is WinResult.WinType.NONE ) return;
 
-        string img = Properties.Resources.Ladybug;
-        if (winner == 1) img = Properties.Resources.Butterfly;
-        if (winner == 2) img = Properties.Resources.Bird;
+        Cursor = Cursors.Arrow;
 
+        lblDisplay.Content = "Winner!";
 
-        imgIndicator.Source = new BitmapImage(new Uri(img, UriKind.Relative));
+        if(winner.Winner is WinResult.WinType.STALEMATE)
+            lblDisplay.Content = "Stalemate!";
 
-        foreach (var button in buttons) button.Visibility = Visibility.Hidden;
+        DisplayWinner(winner);
 
         btnReset.Visibility = Visibility.Visible;
+    }
+
+    private void DisplayWinner(WinResult result)
+    {
+        foreach (var btn in buttons)
+            btn.IsEnabled = false;
+
+        for (int i = 0; i < images.Length; i++)
+        {
+            if(!result.WinningTiles.Contains(i) && result.Winner is not WinResult.WinType.STALEMATE)
+                images[i].Visibility = Visibility.Hidden;
+
+            if (result.Winner is WinResult.WinType.STALEMATE)
+                images[i].Source = (ImageSource)theme.ResDict["Stalemate"]; 
+        }
     }
 
     private void UpdatePlayer()
     {
         player1 = !player1;
-        BitmapImage img = new BitmapImage(new Uri(player1 ? Properties.Resources.Ladybug : Properties.Resources.Butterfly, UriKind.Relative));
-        imgIndicator.Source = img;
+        Cursor = player1 ? theme.Player1Cursor : theme.Player2Cursor;
     }
 
     private void TakeTurn(Image img, Button btn, int pos)
     {
         game.TakeTurn(player1 ? 0 : 1, pos);
-        img.Source = new BitmapImage(new Uri(player1 ? Properties.Resources.Ladybug : Properties.Resources.Butterfly, UriKind.Relative));
+        img.Source = player1 ? (ImageSource)theme.ResDict["Player1"] : (ImageSource)theme.ResDict["Player2"];
 
         btn.IsEnabled = false;
         UpdatePlayer();
@@ -94,13 +103,49 @@ public partial class MainWindow : Window
             btn.Visibility = Visibility.Visible;
             btn.IsEnabled = true;
         }
-        foreach (var img in images) img.Source = null;
+        foreach (var img in images)
+        {
+            img.Source = null;
+            img.Visibility = Visibility.Visible;
+        }
 
-        lblDisplay.Content = "Turn";
-        imgIndicator.Source = new BitmapImage(new Uri(Properties.Resources.Ladybug, UriKind.Relative));
+        lblDisplay.Content = "";
+        Cursor = theme.Player1Cursor;
 
         game = new();
         player1 = true;
     }
 
+    private void ChangeTheme(Theme themeType)
+    {
+        theme = GetTheme(themeType);
+        Application.Current.Resources.Clear();
+        Application.Current.Resources.MergedDictionaries.Add(theme.ResDict);
+
+        for (int i = 0; i < game.Positions.Count(); i++)//update tiles
+        {
+            if (game.Positions[i] == 0)
+                images[i].Source = (ImageSource)theme.ResDict["Player1"];
+            if (game.Positions[i] == 1)
+                images[i].Source = (ImageSource)theme.ResDict["Player2"];
+            if (game.CheckWin().Winner is WinResult.WinType.STALEMATE)
+                images[i].Source = (ImageSource)theme.ResDict["Stalemate"];
+        }
+
+        Cursor = player1 ? theme.Player1Cursor : theme.Player2Cursor;//update cursor
+
+        bool useBorder = theme.CurrentTheme is Theme.BUG;
+
+        horizontalDividers[0].Visibility = useBorder ? Visibility.Visible : Visibility.Hidden;
+        horizontalDividers[3].Visibility = useBorder ? Visibility.Visible : Visibility.Hidden;
+        verticalDividers[0].Visibility = useBorder ? Visibility.Visible : Visibility.Hidden;
+        verticalDividers[3].Visibility = useBorder ? Visibility.Visible : Visibility.Hidden;
+
+    }
+
+    private void menuBugTheme_Click(object sender, RoutedEventArgs e) => ChangeTheme(Theme.BUG);
+    private void menuCandyTheme_Click(object sender, RoutedEventArgs e) => ChangeTheme(Theme.CANDY);
+    private void menuTraditionalTheme_Click(object sender, RoutedEventArgs e) => ChangeTheme(Theme.TRADITIONAL);
+    private void menuSeaTheme_Click(object sender, RoutedEventArgs e) => ChangeTheme(Theme.SEA);
+    private void menuCardTheme_Click(object sender, RoutedEventArgs e) => ChangeTheme(Theme.CARD);
 }

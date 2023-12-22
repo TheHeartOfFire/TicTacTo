@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TicTacTo.UI"
         mc:Ignorable="d"
-        Title="Tic Tac To" Height="464" Width="468" Foreground="{x:Null}" ResizeMode="CanMinimize">
+        Title="Tic Tac To" Height="464" Width="468" Foreground="{x:Null}" ResizeMode="CanMinimize" Background="{DynamicResource Background}">
     <Window.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -62,20 +62,19 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
     </Window.Resources>
-    <Window.Background>
-        <ImageBrush ImageSource="/Assets/GrassyBackground.png" Stretch="Fill"/>
-    </Window.Background>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" MinWidth="65" MaxWidth="100"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="18"/>
             <RowDefinition Height="33*"/>
             <RowDefinition Height="401*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.ColumnSpan="2" Margin="0,34,0,0" Grid.RowSpan="2">
+        <Grid Grid.ColumnSpan="2" Margin="0,34,0,0" Grid.RowSpan="2" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -86,8 +85,8 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button Style="{DynamicResource TTTButton}" x:Name="btnPos0" Margin="5,5,5,5" Padding="1,1,1,1" BorderBrush="{x:Null}" Click="btnPos0_Click" Foreground="{x:Null}" Background="#3F000000">
-                <Image x:Name="imgPos0" Height="100" Width="100" IsHitTestVisible="False"/>
+            <Button Style="{DynamicResource TTTButton}" x:Name="btnPos0" Margin="5,5,5,5" BorderBrush="{x:Null}" Click="btnPos0_Click" Foreground="{x:Null}" Background="#3F000000" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <Image x:Name="imgPos0" IsHitTestVisible="False" />
             </Button>
             <Button Style="{DynamicResource TTTButton}" x:Name="btnPos1" Grid.Column="1" Padding="5,5,5,5" Margin="5,5,5,5" BorderBrush="{x:Null}" Click="btnPos1_Click" Foreground="{x:Null}" Background="#3F000000">
                 <Image x:Name="imgPos1" Height="100" Width="100"/>
@@ -113,21 +112,27 @@
             <Button Style="{DynamicResource TTTButton}" x:Name="btnPos8" Grid.Column="2" Grid.Row="2" Margin="5,5,5,5" BorderBrush="{x:Null}" Click="btnPos8_Click" Foreground="{x:Null}" Background="#3F000000">
                 <Image x:Name="imgPos8" Height="100" Width="100"/>
             </Button>
-            <Image HorizontalAlignment="Left" Grid.RowSpan="3" Width="100" Source="/Assets/VineVertical.png" Margin="-50,0,0,0"/>
-            <Image HorizontalAlignment="Right" Width="100" Source="/Assets/VineVertical.png" Grid.Column="2" Margin="0,0,-42,0" Grid.RowSpan="3"/>
-            <Image Grid.ColumnSpan="2" HorizontalAlignment="Center" Grid.RowSpan="3" Width="100" Source="/Assets/VineVertical.png"/>
-            <Image Grid.ColumnSpan="2" HorizontalAlignment="Center" Grid.RowSpan="3" Width="100" Source="/Assets/VineVertical.png" Grid.Column="1"/>
-            <Image Grid.ColumnSpan="3" Source="/Assets/Vine.png" VerticalAlignment="Top" Margin="0,-42,0,0"/>
-            <Image Grid.ColumnSpan="3" Source="/Assets/Vine.png" VerticalAlignment="Bottom" Grid.Row="2" Margin="0,0,0,-42"/>
-            <Image Grid.ColumnSpan="3" Grid.RowSpan="2" Source="/Assets/Vine.png"/>
-            <Image Grid.ColumnSpan="3" Grid.RowSpan="2" Source="/Assets/Vine.png" Grid.Row="1"/>
+            <Image x:Name="imgVerticalDivider0" HorizontalAlignment="Left" Grid.RowSpan="3" Width="100"  Margin="-50,0,0,0" IsHitTestVisible="False" Source="{DynamicResource VerticalDivider}"/>
+            <Image x:Name="imgVerticalDivider3" HorizontalAlignment="Right" Width="100"  Grid.Column="2" Margin="0,0,-42,0" Grid.RowSpan="3" IsHitTestVisible="False" Source="{DynamicResource VerticalDivider}"/>
+            <Image x:Name="imgHorizontalDivider0" Grid.ColumnSpan="3"  VerticalAlignment="Top" Margin="0,-42,0,0" IsHitTestVisible="False" Source="{DynamicResource HorizontalDivider}"/>
+            <Image x:Name="imgHorizontalDivider3" Grid.ColumnSpan="3"  VerticalAlignment="Bottom" Grid.Row="2" Margin="0,0,0,-42" IsHitTestVisible="False" Source="{DynamicResource HorizontalDivider}"/>
+            <Image x:Name="imgHorizontalDivider1" Grid.ColumnSpan="3" Grid.RowSpan="2"  IsHitTestVisible="False" Source="{DynamicResource HorizontalDivider}"/>
+            <Image x:Name="imgHorizontalDivider2" Grid.ColumnSpan="3" Grid.RowSpan="2" Grid.Row="1" IsHitTestVisible="False" Source="{DynamicResource HorizontalDivider}"/>
+            <Image x:Name="imgVerticalDivider1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Grid.RowSpan="3" Width="100"  IsHitTestVisible="False" Source="{DynamicResource VerticalDivider}"/>
+            <Image x:Name="imgVerticalDivider2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Grid.RowSpan="3" Width="100"  Grid.Column="1" IsHitTestVisible="False" Source="{DynamicResource VerticalDivider}"/>
         </Grid>
-        <Label x:Name="lblDisplay" Content="Turn" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="24" Padding="0,0,0,0" Foreground="Red" FontFamily="Comic Sans MS" FontWeight="Bold" Height="34" VerticalAlignment="Center" Background="#7F000000" />
-        <Button x:Name="btnReset" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Top" Foreground="{x:Null}" BorderBrush="{x:Null}" Click="btnReset_Click" Visibility="Hidden" Grid.Column="1" >
-            <Button.Background>
-                <ImageBrush ImageSource="/Assets/Reset_White.png"/>
-            </Button.Background>
-        </Button>
-        <Image x:Name="imgIndicator" HorizontalAlignment="Left" Height="30" VerticalAlignment="Center" Width="30" Grid.Column="1" Margin="5,0,0,0" Source="/Assets/Ladybug.png"/>
+        <Label x:Name="lblDisplay" Content="" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="24" Padding="0,0,0,0" Foreground="{DynamicResource Text}" FontFamily="Comic Sans MS" FontWeight="Bold" Height="34" VerticalAlignment="Center" Background="#7F000000" Grid.Row="1" />
+        <Button x:Name="btnReset" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Top" Foreground="{x:Null}" BorderBrush="{x:Null}" Click="btnReset_Click" Grid.Column="1" Grid.Row="1" Visibility="Hidden" Background="{DynamicResource Reset}" />
+         <Menu Cursor="Arrow" ForceCursor="True" HorizontalContentAlignment="Stretch" Grid.ColumnSpan="2">
+            <MenuItem Header="_Theme" FontFamily="Comic Sans MS">
+                <MenuItem x:Name="menuBugTheme" Header="_Wooded Wonderland" Click="menuBugTheme_Click" />
+                <MenuItem x:Name="menuCandyTheme" Header="_Candy Kingdom" Click="menuCandyTheme_Click"/>
+                <MenuItem x:Name="menuTraditionalTheme" Header="_Ol' Faithful" Click="menuTraditionalTheme_Click"/>
+                <MenuItem x:Name="menuSeaTheme" Header="_Seaside Sanctuary" Click="menuSeaTheme_Click"/>
+                <MenuItem x:Name="menuCardTheme" Header="_Poker Playground" Click="menuCardTheme_Click"/>
+            </MenuItem>
+            <MenuItem Header="_Settings" FontFamily="Comic Sans MS">
+            </MenuItem>
+        </Menu>
     </Grid>
 </Window>

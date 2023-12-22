@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <BitmapImage UriSource="Player1.png" x:Key="Player1"/>
+    <BitmapImage UriSource="Player2.png" x:Key="Player2"/>
+    <BitmapImage UriSource="Stalemate.png" x:Key="Stalemate"/>
+    <BitmapImage UriSource="VerticalDivider.png" x:Key="VerticalDivider"/>
+    <BitmapImage UriSource="HorizontalDivider.png" x:Key="HorizontalDivider"/>
+    <ImageBrush ImageSource="Background.png" x:Key="Background"/>
+    <ImageBrush ImageSource="Reset.png" x:Key="Reset"/>
+    <SolidColorBrush Color="HotPink" x:Key="Text"/>
+</ResourceDictionary>

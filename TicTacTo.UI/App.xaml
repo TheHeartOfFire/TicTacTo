@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:TicTacTo.UI"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary Source="Assets/Themes/bug/Theme.xaml"/>
     </Application.Resources>
 </Application>
