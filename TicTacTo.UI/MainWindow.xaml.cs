@@ -2,7 +2,6 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using TicTacTo.Core;
 using static TicTacTo.UI.ThemeManager;
 
@@ -23,27 +22,39 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        buttons = [btnPos0, btnPos1, btnPos2,
-                   btnPos3, btnPos4, btnPos5,
-                   btnPos6, btnPos7, btnPos8];
-        images = [imgPos0, imgPos1, imgPos2,
-                  imgPos3, imgPos4, imgPos5,
-                  imgPos6, imgPos7, imgPos8];
-        verticalDividers = [ imgVerticalDivider0, imgVerticalDivider1, imgVerticalDivider2, imgVerticalDivider3];
-        horizontalDividers = [ imgHorizontalDivider0, imgHorizontalDivider1, imgHorizontalDivider2, imgHorizontalDivider3];
+        buttons = [btnPos0,
+            btnPos1,
+            btnPos2,
+            btnPos3,
+            btnPos4,
+            btnPos5,
+            btnPos6,
+            btnPos7,
+            btnPos8];
+        images = [imgPos0,
+            imgPos1,
+            imgPos2,
+            imgPos3,
+            imgPos4,
+            imgPos5,
+            imgPos6,
+            imgPos7,
+            imgPos8];
+        verticalDividers = [imgVerticalDivider0, imgVerticalDivider1, imgVerticalDivider2, imgVerticalDivider3];
+        horizontalDividers = [imgHorizontalDivider0, imgHorizontalDivider1, imgHorizontalDivider2, imgHorizontalDivider3];
         ChangeTheme(Theme.BUG);
     }
 
     private void GameOver()
     {
         var winner = game.CheckWin();
-        if (winner.Winner is WinResult.WinType.NONE ) return;
+        if (winner.Winner is WinResult.WinType.NONE) return;
 
         Cursor = Cursors.Arrow;
 
         lblDisplay.Content = "Winner!";
 
-        if(winner.Winner is WinResult.WinType.STALEMATE)
+        if (winner.Winner is WinResult.WinType.STALEMATE)
             lblDisplay.Content = "Stalemate!";
 
         DisplayWinner(winner);
@@ -58,11 +69,11 @@ public partial class MainWindow : Window
 
         for (int i = 0; i < images.Length; i++)
         {
-            if(!result.WinningTiles.Contains(i) && result.Winner is not WinResult.WinType.STALEMATE)
+            if (!result.WinningTiles.Contains(i) && result.Winner is not WinResult.WinType.STALEMATE)
                 images[i].Visibility = Visibility.Hidden;
 
             if (result.Winner is WinResult.WinType.STALEMATE)
-                images[i].Source = (ImageSource)theme.ResDict["Stalemate"]; 
+                images[i].Source = (ImageSource)theme.ResDict["Stalemate"];
         }
     }
 
@@ -148,4 +159,10 @@ public partial class MainWindow : Window
     private void menuTraditionalTheme_Click(object sender, RoutedEventArgs e) => ChangeTheme(Theme.TRADITIONAL);
     private void menuSeaTheme_Click(object sender, RoutedEventArgs e) => ChangeTheme(Theme.SEA);
     private void menuCardTheme_Click(object sender, RoutedEventArgs e) => ChangeTheme(Theme.CARD);
+
+    private void menuCoinToss_Click(object sender, RoutedEventArgs e)
+    {
+        var coinToss = new CoinToss(theme);
+        coinToss.Show();
+    }
 }

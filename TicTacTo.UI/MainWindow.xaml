@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TicTacTo.UI"
         mc:Ignorable="d"
-        Title="Tic Tac To" Height="464" Width="468" Foreground="{x:Null}" ResizeMode="CanMinimize" Background="{DynamicResource Background}">
+        Title="Tic Tac To" Height="512" Width="512" Foreground="{x:Null}" ResizeMode="CanMinimize" Background="{DynamicResource Background}" Icon="/Assets/TTTIcon.png">
     <Window.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -131,7 +131,8 @@
                 <MenuItem x:Name="menuSeaTheme" Header="_Seaside Sanctuary" Click="menuSeaTheme_Click"/>
                 <MenuItem x:Name="menuCardTheme" Header="_Poker Playground" Click="menuCardTheme_Click"/>
             </MenuItem>
-            <MenuItem Header="_Settings" FontFamily="Comic Sans MS">
+            <MenuItem Header="T_ools" FontFamily="Comic Sans MS">
+                <MenuItem x:Name="menuCoinToss" Header="Whose first?" Click="menuCoinToss_Click"/>
             </MenuItem>
         </Menu>
     </Grid>

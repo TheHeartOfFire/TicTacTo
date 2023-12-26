@@ -51,6 +51,7 @@
     <None Remove="Assets\Themes\Traditional\Player2.png" />
     <None Remove="Assets\Themes\Traditional\Reset.png" />
     <None Remove="Assets\Themes\Traditional\VerticalDivider.png" />
+    <None Remove="Assets\TTTIcon.png" />
     <None Remove="Assets\Vine.png" />
     <None Remove="Assets\VineVertical.png" />
   </ItemGroup>
@@ -193,6 +194,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Themes\Traditional\VerticalDivider.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\TTTIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

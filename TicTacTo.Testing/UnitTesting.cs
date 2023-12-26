@@ -1,5 +1,4 @@
-﻿using System.Security.Principal;
-using TicTacTo.Core;
+﻿using TicTacTo.Core;
 using Xunit;
 using static TicTacTo.Core.WinResult;
 
@@ -15,11 +14,11 @@ namespace TicTacTo.Testing
         }
 
         [Theory]
-        [InlineData(new int[9] { 0, 0, 0, 
-                                 1, 1, 0, 
+        [InlineData(new int[9] { 0, 0, 0,
+                                 1, 1, 0,
                                  1, 1, -1 }, WinType.PLAYER1)] //Player 1 win - Row
-        [InlineData(new int[9] { 1, 1, 1, 
-                                 0, 0, 1, 
+        [InlineData(new int[9] { 1, 1, 1,
+                                 0, 0, 1,
                                  0, 0, -1 }, WinType.PLAYER2)] //Player 2 win - Row
         [InlineData(new int[9] { 1, 0, 0,
                                  1, 0, 0,
@@ -33,8 +32,8 @@ namespace TicTacTo.Testing
         [InlineData(new int[9] { 1, 1, 0,
                                  1, 0, 1,
                                  0, 0, -1 }, WinType.PLAYER1)] //Player 1 win - Diagonal
-        [InlineData(new int[9] { 1, 0, 1, 
-                                 0, 0, 1, 
+        [InlineData(new int[9] { 1, 0, 1,
+                                 0, 0, 1,
                                  0, 1, 0 }, WinType.STALEMATE)] //Player 1 win - Stalemate
         [InlineData(new int[9] { 1, 0, 1,
                                  0, 0, 1,

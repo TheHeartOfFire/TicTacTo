@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 
 namespace TicTacTo.UI
 {
@@ -32,7 +20,7 @@ namespace TicTacTo.UI
             {
                 Source = new Uri("Assets/Themes/Candy/Theme.xaml", UriKind.Relative)
             }, Theme.CANDY),
-        new ThemeManager(
+            new ThemeManager(
             new Cursor(Application.GetResourceStream(new Uri("Assets/Themes/Traditional/Player1.cur", UriKind.Relative)).Stream),
             new Cursor(Application.GetResourceStream(new Uri("Assets/Themes/Traditional/Player2.cur", UriKind.Relative)).Stream),
             new ResourceDictionary()

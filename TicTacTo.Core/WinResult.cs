@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TicTacTo.Core;
+﻿namespace TicTacTo.Core;
 public class WinResult(WinResult.WinType winner, int[] winningTiles)
 {
     public enum WinType
