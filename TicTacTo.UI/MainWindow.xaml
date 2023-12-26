@@ -86,7 +86,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Button Style="{DynamicResource TTTButton}" x:Name="btnPos0" Margin="5,5,5,5" BorderBrush="{x:Null}" Click="btnPos0_Click" Foreground="{x:Null}" Background="#3F000000" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                <Image x:Name="imgPos0" IsHitTestVisible="False" />
+                <Image x:Name="imgPos0" Width="100" Height="100" />
             </Button>
             <Button Style="{DynamicResource TTTButton}" x:Name="btnPos1" Grid.Column="1" Padding="5,5,5,5" Margin="5,5,5,5" BorderBrush="{x:Null}" Click="btnPos1_Click" Foreground="{x:Null}" Background="#3F000000">
                 <Image x:Name="imgPos1" Height="100" Width="100"/>
