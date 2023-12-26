@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AssemblyTitle>TicTacToe.Core</AssemblyTitle>
     <Product>TicTacToe.Core</Product>
     <Copyright>Copyright ©  2023</Copyright>

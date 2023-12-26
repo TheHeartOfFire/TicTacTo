@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <OutputType>Exe</OutputType>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AssemblyTitle>TicTacToe.Testing</AssemblyTitle>
     <Product>TicTacToe.Testing</Product>
     <Copyright>Copyright ©  2023</Copyright>

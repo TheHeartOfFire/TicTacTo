@@ -9,54 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Assets\Bird.png" />
-    <None Remove="Assets\Bug_Player1.cur" />
-    <None Remove="Assets\Bug_Player2.cur" />
-    <None Remove="Assets\Bug_Player2.png" />
-    <None Remove="Assets\GrassyBackground.png" />
-    <None Remove="Assets\Ladybug.png" />
-    <None Remove="Assets\reset-14427.png" />
-    <None Remove="Assets\Reset_White.png" />
-    <None Remove="Assets\Themes\Candy\Background.png" />
-    <None Remove="Assets\Themes\Candy\HorizontalDivider.png" />
-    <None Remove="Assets\Themes\Candy\Player1.cur" />
-    <None Remove="Assets\Themes\Candy\Player1.png" />
-    <None Remove="Assets\Themes\Candy\Player2.cur" />
-    <None Remove="Assets\Themes\Candy\Player2.png" />
-    <None Remove="Assets\Themes\Candy\Reset.png" />
-    <None Remove="Assets\Themes\Candy\Stalemate.png" />
-    <None Remove="Assets\Themes\Candy\VerticalDivider.png" />
-    <None Remove="Assets\Themes\Card\Background.png" />
-    <None Remove="Assets\Themes\Card\HorizontalDivider.png" />
-    <None Remove="Assets\Themes\Card\Player1.cur" />
-    <None Remove="Assets\Themes\Card\Player1.png" />
-    <None Remove="Assets\Themes\Card\Player2.cur" />
-    <None Remove="Assets\Themes\Card\Player2.png" />
-    <None Remove="Assets\Themes\Card\Reset.png" />
-    <None Remove="Assets\Themes\Card\Stalemate.png" />
-    <None Remove="Assets\Themes\Card\VerticalDivider.png" />
-    <None Remove="Assets\Themes\Sea\Background.png" />
-    <None Remove="Assets\Themes\Sea\HorizontalDivider.png" />
-    <None Remove="Assets\Themes\Sea\Player1.cur" />
-    <None Remove="Assets\Themes\Sea\Player1.png" />
-    <None Remove="Assets\Themes\Sea\Player2.cur" />
-    <None Remove="Assets\Themes\Sea\Player2.png" />
-    <None Remove="Assets\Themes\Sea\Reset.png" />
-    <None Remove="Assets\Themes\Sea\Stalemate.png" />
-    <None Remove="Assets\Themes\Sea\VerticalDivider.png" />
-    <None Remove="Assets\Themes\Traditional\HorizontalDivider.png" />
-    <None Remove="Assets\Themes\Traditional\Player1.cur" />
-    <None Remove="Assets\Themes\Traditional\Player1.png" />
-    <None Remove="Assets\Themes\Traditional\Player2.cur" />
-    <None Remove="Assets\Themes\Traditional\Player2.png" />
-    <None Remove="Assets\Themes\Traditional\Reset.png" />
-    <None Remove="Assets\Themes\Traditional\VerticalDivider.png" />
-    <None Remove="Assets\TTTIcon.png" />
-    <None Remove="Assets\Vine.png" />
-    <None Remove="Assets\VineVertical.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Assets\Themes\Bug\Player2.cur">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
