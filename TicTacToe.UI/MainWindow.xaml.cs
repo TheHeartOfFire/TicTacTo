@@ -50,13 +50,13 @@ public partial class MainWindow : Window
     private void GameOver()
     {
         var winner = game.CheckWin();//Get the current WinStatus of the game
-        if (winner.Winner is WinResult.WinType.NONE) return;//If the game is still in progress, do nothing
+        if (winner.Winner is WinResult.WinType.None) return;//If the game is still in progress, do nothing
 
         Cursor = Cursors.Arrow;//Change the cursor back to the normal one as no players are taking a turn
 
         lblDisplay.Content = "Winner!";
 
-        if (winner.Winner is WinResult.WinType.STALEMATE)//If the game was decisive, Tell the player there wass a winner, otherwise, tell them it was a stalemate.
+        if (winner.Winner is WinResult.WinType.Stalemate)//If the game was decisive, Tell the player there wass a winner, otherwise, tell them it was a stalemate.
             lblDisplay.Content = "Stalemate!";
 
         DisplayWinner(winner);//Display the results of the game
@@ -74,10 +74,10 @@ public partial class MainWindow : Window
 
         for (int i = 0; i < images.Length; i++)
         {
-            if (!result.WinningTiles.Contains(i) && result.Winner is not WinResult.WinType.STALEMATE)
+            if (!result.WinningTiles.Contains(i) && result.Winner is not WinResult.WinType.Stalemate)
                 images[i].Visibility = Visibility.Hidden;//if the game was decisive, show the tiles that make up the win condition
 
-            if (result.Winner is WinResult.WinType.STALEMATE)
+            if (result.Winner is WinResult.WinType.Stalemate)
                 images[i].Source = (ImageSource)theme.ResDict["Stalemate"];//if the game was a stalemate, fill all tiles with stalemate image
         }
     }
@@ -162,7 +162,7 @@ public partial class MainWindow : Window
                 images[i].Source = (ImageSource)theme.ResDict["Player1"];
             if (game.Positions[i] == 1)
                 images[i].Source = (ImageSource)theme.ResDict["Player2"];
-            if (game.CheckWin().Winner is WinResult.WinType.STALEMATE)
+            if (game.CheckWin().Winner is WinResult.WinType.Stalemate)
                 images[i].Source = (ImageSource)theme.ResDict["Stalemate"];
         }
 

@@ -66,13 +66,13 @@ public class Board
         foreach (var condition in winConditions) //Check for a win
         {
             if (positions[condition[0]] == positions[condition[1]] && positions[condition[0]] == positions[condition[2]] && positions[condition[0]] != -1) // if a = b and a = c then b = c. Doing it this way avoids a nested loop maintaining constant time.
-                return new WinResult(positions[condition[0]] == 0 ? WinType.PLAYER1 : WinType.PLAYER2, condition); //if a win is detected, then any/all of the tiles in the win condition contain the winning player
+                return new WinResult(positions[condition[0]] == 0 ? WinType.Player1 : WinType.Player2, condition); //if a win is detected, then any/all of the tiles in the win condition contain the winning player
         }
 
         bool stalemate = true;
         foreach (var position in positions)          // Check for stalemate or incomplete game. This only runs if no outright win is detected. 
             stalemate = position != -1 && stalemate; // Stalemate only changes state if it is still true and the board contains an unplayed tile
 
-        return new WinResult(stalemate ? WinType.STALEMATE : WinType.NONE, positions);
+        return new WinResult(stalemate ? WinType.Stalemate : WinType.None, positions);
     }
 }

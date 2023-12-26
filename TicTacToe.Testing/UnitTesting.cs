@@ -16,28 +16,28 @@ namespace TicTacToe.Testing
         [Theory]
         [InlineData(new int[9] { 0, 0, 0,
                                  1, 1, 0,
-                                 1, 1, -1 }, WinType.PLAYER1)] //Player 1 win - Row
+                                 1, 1, -1 }, WinType.Player1)] //Player 1 win - Row
         [InlineData(new int[9] { 1, 1, 1,
                                  0, 0, 1,
-                                 0, 0, -1 }, WinType.PLAYER2)] //Player 2 win - Row
+                                 0, 0, -1 }, WinType.Player2)] //Player 2 win - Row
         [InlineData(new int[9] { 1, 0, 0,
                                  1, 0, 0,
-                                 1, 1, -1 }, WinType.PLAYER2)] //Player 2 win - Column
+                                 1, 1, -1 }, WinType.Player2)] //Player 2 win - Column
         [InlineData(new int[9] { 1, 0, 1,
                                  1, 0, 1,
-                                 0, 0, -1 }, WinType.PLAYER1)] //Player 1 win - Column
+                                 0, 0, -1 }, WinType.Player1)] //Player 1 win - Column
         [InlineData(new int[9] { 0, 0, 1,
                                  1, 1, 0,
-                                 1, 0, -1 }, WinType.PLAYER2)] //Player 2 win - Diagonal
+                                 1, 0, -1 }, WinType.Player2)] //Player 2 win - Diagonal
         [InlineData(new int[9] { 1, 1, 0,
                                  1, 0, 1,
-                                 0, 0, -1 }, WinType.PLAYER1)] //Player 1 win - Diagonal
+                                 0, 0, -1 }, WinType.Player1)] //Player 1 win - Diagonal
         [InlineData(new int[9] { 1, 0, 1,
                                  0, 0, 1,
-                                 0, 1, 0 }, WinType.STALEMATE)] //Player 1 win - Stalemate
+                                 0, 1, 0 }, WinType.Stalemate)] //Player 1 win - Stalemate
         [InlineData(new int[9] { 1, 0, 1,
                                  0, 0, 1,
-                                 0, 1, -1 }, WinType.NONE)] //Player 1 win - Incomplete Game
+                                 0, 1, -1 }, WinType.None)] //Player 1 win - Incomplete Game
         public void Play(int[] positions, WinType expected)
         {
             for (int i = 0; i < positions.Length; i++)

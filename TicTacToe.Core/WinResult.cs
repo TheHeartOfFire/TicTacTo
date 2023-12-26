@@ -3,10 +3,10 @@ public class WinResult(WinResult.WinType winner, int[] winningTiles)
 {
     public enum WinType
     {
-        NONE,
-        PLAYER1,
-        PLAYER2,
-        STALEMATE
+        None,
+        Player1,
+        Player2,
+        Stalemate
     }
 
     public WinType Winner { get; } = winner;
