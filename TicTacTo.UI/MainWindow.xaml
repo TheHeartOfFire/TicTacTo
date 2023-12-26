@@ -133,6 +133,7 @@
             </MenuItem>
             <MenuItem Header="T_ools" FontFamily="Comic Sans MS">
                 <MenuItem x:Name="menuCoinToss" Header="Whose first?" Click="menuCoinToss_Click"/>
+                <MenuItem x:Name="menuInstructions" Header="How to Play" Click="menuInstructions_Click" />
             </MenuItem>
         </Menu>
     </Grid>
