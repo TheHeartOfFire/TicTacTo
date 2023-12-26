@@ -2,10 +2,10 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using TicTacTo.Core;
-using static TicTacTo.UI.ThemeManager;
+using TicTacToe.Core;
+using static TicTacToe.UI.ThemeManager;
 
-namespace TicTacTo.UI;
+namespace TicTacToe.UI;
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>

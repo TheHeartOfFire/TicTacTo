@@ -11,9 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using static TicTacTo.UI.ThemeManager;
+using static TicTacToe.UI.ThemeManager;
 
-namespace TicTacTo.UI
+namespace TicTacToe.UI
 {
     /// <summary>
     /// Interaction logic for CoinToss.xaml

@@ -2,11 +2,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicTacTo.Core", "TicTacTo.Core\TicTacTo.Core.csproj", "{3737268B-094D-4025-B189-D393AFD1545D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicTacToe.Core", "TicTacToe.Core\TicTacToe.Core.csproj", "{3737268B-094D-4025-B189-D393AFD1545D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicTacTo.Testing", "TicTacTo.Testing\TicTacTo.Testing.csproj", "{40740C23-4C29-4905-9702-6C57D5E34AA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicTacToe.Testing", "TicTacToe.Testing\TicTacToe.Testing.csproj", "{40740C23-4C29-4905-9702-6C57D5E34AA1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3737268B-094D-4025-B189-D393AFD1545D} = {3737268B-094D-4025-B189-D393AFD1545D}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacTo.UI", "TicTacTo.UI\TicTacTo.UI.csproj", "{184E4143-3228-49A5-BDFD-0724FCF95432}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicTacToe.UI", "TicTacToe.UI\TicTacToe.UI.csproj", "{184E4143-3228-49A5-BDFD-0724FCF95432}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

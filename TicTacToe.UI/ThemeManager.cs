@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 
-namespace TicTacTo.UI
+namespace TicTacToe.UI
 {
     public class ThemeManager(Cursor player1Cursor, Cursor player2Cursor, ResourceDictionary resDict, ThemeManager.Theme theme)
     {

@@ -1,7 +1,7 @@
 ﻿using System;
-using static TicTacTo.Core.WinResult;
+using static TicTacToe.Core.WinResult;
 
-namespace TicTacTo.Core;
+namespace TicTacToe.Core;
 
 /// <summary>
 /// This class will instantiate a board, update the board according to player selections, and check the board to see if there is a win/tie.

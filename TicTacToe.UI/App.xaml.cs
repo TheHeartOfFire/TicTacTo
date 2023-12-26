@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace TicTacTo.UI;
+namespace TicTacToe.UI;
 /// <summary>
 /// Interaction logic for App.xaml
 /// </summary>

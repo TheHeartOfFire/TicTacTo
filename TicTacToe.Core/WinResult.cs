@@ -1,4 +1,4 @@
-﻿namespace TicTacTo.Core;
+﻿namespace TicTacToe.Core;
 public class WinResult(WinResult.WinType winner, int[] winningTiles)
 {
     public enum WinType

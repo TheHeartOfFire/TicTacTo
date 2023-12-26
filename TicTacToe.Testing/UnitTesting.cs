@@ -1,8 +1,8 @@
-﻿using TicTacTo.Core;
+﻿using TicTacToe.Core;
 using Xunit;
-using static TicTacTo.Core.WinResult;
+using static TicTacToe.Core.WinResult;
 
-namespace TicTacTo.Testing
+namespace TicTacToe.Testing
 {
     public class UnitTesting
     {

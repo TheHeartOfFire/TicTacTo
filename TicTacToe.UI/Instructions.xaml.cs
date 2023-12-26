@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace TicTacTo.UI
+namespace TicTacToe.UI
 {
     /// <summary>
     /// Interaction logic for Instructions.xaml
