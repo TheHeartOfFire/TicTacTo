@@ -15,11 +15,11 @@
             <RowDefinition Height="Auto"/>
 
         </Grid.RowDefinitions>
-        <Label x:Name="lblPress" Content="Press the button to determine if you go first!" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+        <Label x:Name="lblPress" Content="Press the button to determine if you go first!" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="{Binding ElementName=btnCoinToss, Path=Visibility}"/>
         <Button x:Name="btnCoinToss" Content="Press Me" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.445,-4.314" Grid.Row="4" Margin="0,0,0,20" FontSize="20" Click="btnCoinToss_Click"/>
         <Image x:Name="imgIcon" Height="100" Width="100" Grid.Row="2" Source="/Assets/Themes/Bug/Player1.png" Visibility="Hidden"/>
-        <Label x:Name="lblFirst" Content="You go first!" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="3" Visibility="Hidden"/>
-        <Label x:Name="lblIcon" Content="Your icon will be" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1" Visibility="Hidden"/>
+        <Label x:Name="lblFirst" Content="You go first!" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="3" Visibility="{Binding ElementName=imgIcon, Path=Visibility}"/>
+        <Label x:Name="lblIcon" Content="Your icon will be" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1" Visibility="{Binding ElementName=imgIcon, Path=Visibility}"/>
 
     </Grid>
 </Window>

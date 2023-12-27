@@ -9,7 +9,6 @@
     <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TicTacTo.Core\TicTacToe.Core.csproj" />
     <ProjectReference Include="..\TicTacToe.Core\TicTacToe.Core.csproj" />
   </ItemGroup>
   <ItemGroup>

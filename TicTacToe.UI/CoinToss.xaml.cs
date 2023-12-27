@@ -48,10 +48,6 @@ namespace TicTacToe.UI
             }
 
             btnCoinToss.Visibility = Visibility.Hidden;
-            lblPress.Visibility = Visibility.Hidden;
-
-            lblIcon.Visibility = Visibility.Visible;
-            lblFirst.Visibility = Visibility.Visible;
             imgIcon.Visibility = Visibility.Visible;
         }
     }
