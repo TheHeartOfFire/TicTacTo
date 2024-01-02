@@ -117,40 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Bug_Background" xml:space="preserve">
-    <value>Assets\Themes\Bug\Background.png</value>
-    <comment>Bug theme Background image path</comment>
-  </data>
-  <data name="Bug_HorizontalDivider" xml:space="preserve">
-    <value>Assets\Themes\Bug\HorizontalDivider.png</value>
-    <comment>Bug theme Horizontal Divider image path</comment>
-  </data>
-  <data name="Bug_Player1" xml:space="preserve">
-    <value>Assets\Themes\Bug\Player1.png</value>
-    <comment>Bug theme Player 1 image path</comment>
-  </data>
-  <data name="Bug_Player1Cursor" xml:space="preserve">
-    <value>Assets\Themes\Bug\Player1.cur</value>
-    <comment>Bug theme Player 1 cursor path</comment>
-  </data>
-  <data name="Bug_Player2" xml:space="preserve">
-    <value>Assets\Themes\Bug\Player2.png</value>
-    <comment>Bug theme Player 2 image path</comment>
-  </data>
-  <data name="Bug_Player2Cursor" xml:space="preserve">
-    <value>Assets\Themes\Bug\Player2.cur</value>
-    <comment>Bug theme Player 2 cursor path</comment>
-  </data>
-  <data name="Bug_Reset" xml:space="preserve">
-    <value>Assets\Themes\Bug\Reset.png</value>
-    <comment>Bug theme Reset image path</comment>
-  </data>
-  <data name="Bug_Stalemate" xml:space="preserve">
-    <value>Assets\Themes\Bug\Stalemate.png</value>
-    <comment>Bug theme Stalemate image path</comment>
-  </data>
-  <data name="Bug_VerticalDivider" xml:space="preserve">
-    <value>Assets\Themes\Bug\VerticalDivider.png</value>
-    <comment>Bug theme Vertical Divider image path</comment>
-  </data>
 </root>

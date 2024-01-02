@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TicTacToe.UI"
         mc:Ignorable="d"
-        Title="Tic Tac To" Height="512" Width="512" Foreground="{x:Null}" ResizeMode="CanMinimize" Background="{DynamicResource Background}" Icon="/Assets/TTTIcon.png">
+        Title="Tic Tac Toe" Height="512" Width="512" Foreground="{x:Null}" ResizeMode="CanMinimize" Background="{DynamicResource Background}" Icon="/Assets/TTTIcon.png">
     <Window.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>TicTacToeWPF</id>
+    <version>0.0.0</version>
+    <title>TicTacToe</title>
+    <authors>HeartFire</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <description>Tic Tac Toe game for resume purposes</description>
+    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+  </metadata>
+  <files>
+  <file src="bin\release\net8.0-windows\**" target="lib\net45" exclude=".pdb"/>
+  </files>
+</package>

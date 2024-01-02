@@ -1,7 +1,10 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Reflection;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Squirrel;
 using TicTacToe.Core;
 using static TicTacToe.UI.ThemeManager;
 
@@ -43,6 +46,8 @@ public partial class MainWindow : Window
         verticalDividers = [imgVerticalDivider0, imgVerticalDivider1, imgVerticalDivider2, imgVerticalDivider3];
         horizontalDividers = [imgHorizontalDivider0, imgHorizontalDivider1, imgHorizontalDivider2, imgHorizontalDivider3];
         ChangeTheme(Theme.BUG);
+        CheckForUpdates();
+        AddVersionNumber();
     }
     /// <summary>
     /// Check for a win condition
@@ -189,4 +194,18 @@ public partial class MainWindow : Window
     private void menuCoinToss_Click(object sender, RoutedEventArgs e) => new CoinToss(theme).Show();
 
     private void menuInstructions_Click(object sender, RoutedEventArgs e) => new Instructions().Show();
+
+    private async Task CheckForUpdates()
+    {
+        using var manager = await UpdateManager.GitHubUpdateManager("https://github.com/TheHeartOfFire/TicTacToe");
+
+            await manager.UpdateApp();
+    } 
+
+    private void AddVersionNumber()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        var versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+        Title = Title + " " + versionInfo.FileVersion;
+    }
 }
