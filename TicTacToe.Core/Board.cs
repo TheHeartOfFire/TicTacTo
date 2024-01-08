@@ -27,6 +27,11 @@ public class Board
         [0, 4, 8], //Back Diagonal
         [2, 4, 6]  //Front Diagonal
     ];
+    /// <summary>
+    /// Current state of the game board.
+    /// Initialized to TileOwner.Unclaimed in all positions.
+    /// Read Only
+    /// </summary>
     private readonly Tile[] positions = [new(0),
         new(1),
         new(2),
@@ -37,17 +42,12 @@ public class Board
         new(7),
         new(8)];
 
-    /// <summary>
-    /// Current state of the game board.
-    /// Initialized to -1 in all positions.
-    /// Empty = -1, 'X' = 0, 'O' = 1
-    /// Read Only
-    /// </summary>
+    
     public Tile[] Positions => positions;
     /// <summary>
     /// Updates the current positions of the board according to what the player chooses.
     /// </summary>
-    /// <param name="player">Player 1 = 0 = 'X', Player 2 = 1 = 'O'</param>
+    /// <param name="player">TileOwner.Player1 or TileOwner.Player2. TileOwner.Unclaimed will throw an error.</param>
     /// <param name="position">Position is the 0-based index of the Positions array.</param>
     /// <returns>False if the position has already been selected, otherwise true.</returns>
     public bool TakeTurn(TileOwner player, int position)
@@ -62,9 +62,9 @@ public class Board
         return true;
     }
     /// <summary>
-    /// 
+    /// Check the board against the list of win conditions and mark any tiles involved in a win as winning tiles.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Returns a WinResult for the current state of the board.</returns>
     public WinResult CheckWin()
     {
         foreach (var condition in winConditions) //Check for a win
