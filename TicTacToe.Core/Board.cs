@@ -14,36 +14,91 @@ public class Board
 
     /// <summary>
     /// Describes the various win conditions for end game lookup
-    /// Each sub array contains the indicies for a row, column, or diagonal on a 3 x 3 board.
+    /// Each sub array contains the indicies for a row, column, or diagonal on a n x n board.
     /// </summary>
-    private readonly int[][] winConditions =
-    [
-        [0, 1, 2], //Row 1
-        [3, 4, 5], //Row 2
-        [6, 7, 8], //Row 3
-        [0, 3, 6], //Column 1
-        [1, 4, 7], //Column 2
-        [2, 5, 8], //Column 3
-        [0, 4, 8], //Back Diagonal
-        [2, 4, 6]  //Front Diagonal
-    ];
+    private readonly int[][] winConditions;
+
     /// <summary>
     /// Current state of the game board.
-    /// Initialized to TileOwner.Unclaimed in all positions.
     /// Read Only
     /// </summary>
-    private readonly Tile[] positions = [new(0),
-        new(1),
-        new(2),
-        new(3),
-        new(4),
-        new(5),
-        new(6),
-        new(7),
-        new(8)];
+    private readonly Tile[] positions;
 
     
     public Tile[] Positions => positions;
+
+    private readonly int boardSize;
+
+    public Board(int size = 3)
+    {
+        boardSize = size;
+        //initialize tiles
+        positions = new Tile[boardSize * boardSize];
+        for (int i = 0; i < positions.Length; i++)
+            positions[i] = new(i);
+        //initialize win conditions
+        winConditions = FindWinConditions(boardSize);
+
+    }
+    /// <summary>
+    /// Generate win conditions for an n x n board
+    /// </summary>
+    /// <param name="size">The size of the board to find win conditions for</param>
+    /// <returns>An int[][] of indicies for all rows, columns and diagonals to be used as win conditions</returns>
+    private static int[][] FindWinConditions(int size)
+    {
+        //for a board of size n, there will be 2 diagonals, n cols, and n rows for a total of 2n+2 conditions
+        var winConditions = new int[(2 * size) + 2][];
+
+        int counter = 0;
+        //Find rows
+
+        // 0 | 1 | 2    0, 1, 2    i = row
+        // 3 | 4 | 5 => 3, 4, 5 => j = col
+        // 6 | 7 | 8    6, 7, 8    (i * size) + j
+        for (int i = 0; i < size; i++)
+        {
+            winConditions[counter] = new int[size];   
+            for (int j = 0; j < size; j++)
+            {
+                winConditions[counter][j] = (i * size) + j;
+            }
+            counter++;
+        }
+
+        //Find cols
+
+        // 0 | 1 | 2    0, 3, 6    i = col
+        // 3 | 4 | 5 => 1, 4, 7 => j = row
+        // 6 | 7 | 8    2, 5, 8    i + (j * size)
+        for (int i = 0; i < size; i++)
+        {
+            winConditions[counter] = new int[size];
+            for (int j = 0; j < size; j++)
+            {
+                winConditions[counter][j] =  i + (j * size);
+            }
+            counter++;
+        }
+
+        //Find diagonals
+
+        winConditions[counter] = new int[size];
+        winConditions[counter + 1] = new int[size];
+        // 0 | 1 | 2    0, 4, 8    (i * size) + i
+        // 3 | 4 | 5 =>         => 
+        // 6 | 7 | 8    6, 4, 2    (size * i) + (size - 1 - i)
+        for (int i = 0; i < size; i++)
+        {
+            winConditions[counter][i] = (i * size) + i;//back diagonal
+            winConditions[counter + 1][i] = (size * i) + (size - 1 - i);//front diagonal
+        }
+
+        return winConditions;
+    }
+
+
+
     /// <summary>
     /// Updates the current positions of the board according to what the player chooses.
     /// </summary>
@@ -54,8 +109,8 @@ public class Board
     {
         if (player is TileOwner.Unclaimed)
             throw new ArgumentException("You cannot unclaim a tile. Player must be either TileOwner.Player1 or TileOwner.Player2", nameof(player));
-        if (position < 0 || position > 8)
-            throw new ArgumentOutOfRangeException(nameof(position), position, "position can only be 0 thru 8 representing the 9 spaces on the board.");
+        if (position < 0 || position > (boardSize * boardSize) - 1)
+            throw new ArgumentOutOfRangeException(nameof(position), position, "position can only be 0 thru (boardSize * 2) - 1 representing the valid indicies on the board.");
 
         if (positions[position].Owner is not TileOwner.Unclaimed) return false; //players can only play on an empty tile. Trying to play on an occupied tile will fail
         positions[position].Claim(player);
@@ -69,12 +124,15 @@ public class Board
     {
         foreach (var condition in winConditions) //Check for a win
         {
-            if (positions[condition[0]] == positions[condition[1]]
-                && positions[condition[0]] == positions[condition[2]]
-                && positions[condition[0]].Owner is not TileOwner.Unclaimed) // if a = b and a = c then b = c. 
-            {
-               MarkWinningTiles(condition);
-            }
+            bool isWin = true;
+            var comparison = positions[condition[0]];
+
+            if (comparison.Owner is TileOwner.Unclaimed) continue;
+
+            foreach (var i in condition)
+                isWin = comparison == positions[i] && isWin;
+
+            if (isWin) MarkWinningTiles(condition);
                 
         }
 
