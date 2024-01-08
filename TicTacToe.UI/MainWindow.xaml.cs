@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Squirrel;
 using TicTacToe.Core;
+using static TicTacToe.Core.Tile;
 using static TicTacToe.UI.ThemeManager;
 
 namespace TicTacToe.UI;
@@ -79,7 +80,7 @@ public partial class MainWindow : Window
 
         for (int i = 0; i < images.Length; i++)
         {
-            if (!result.WinningTiles.Contains(i) && result.Winner is not WinResult.WinType.Stalemate)
+            if (!result.WinningTileIndicies.Contains(i) && result.Winner is not WinResult.WinType.Stalemate)
                 images[i].Visibility = Visibility.Hidden;//if the game was decisive, show the tiles that make up the win condition
 
             if (result.Winner is WinResult.WinType.Stalemate)
@@ -103,7 +104,7 @@ public partial class MainWindow : Window
     /// <param name="pos"></param>
     private void TakeTurn(Image img, Button btn, int pos)
     {
-        game.TakeTurn(player1 ? 0 : 1, pos);//process the turn
+        game.TakeTurn(player1 ? TileOwner.Player1: TileOwner.Player2, pos);//process the turn
         img.Source = player1 ? (ImageSource)theme.ResDict["Player1"] : (ImageSource)theme.ResDict["Player2"];//set the tile's image to the icon for the current player
 
         btn.IsEnabled = false;//disable the button so that this tile can't be chosen again this game
@@ -161,11 +162,11 @@ public partial class MainWindow : Window
         Application.Current.Resources.Clear();
         Application.Current.Resources.MergedDictionaries.Add(theme.ResDict);//Change the active resource dictionary
 
-        for (int i = 0; i < game.Positions.Count(); i++)//update tiles
+        for (int i = 0; i < game.Positions.Length; i++)//update tiles
         {
-            if (game.Positions[i] == 0)
+            if (game.Positions[i].Owner is TileOwner.Player1)
                 images[i].Source = (ImageSource)theme.ResDict["Player1"];
-            if (game.Positions[i] == 1)
+            if (game.Positions[i].Owner is TileOwner.Player2)
                 images[i].Source = (ImageSource)theme.ResDict["Player2"];
             if (game.CheckWin().Winner is WinResult.WinType.Stalemate)
                 images[i].Source = (ImageSource)theme.ResDict["Stalemate"];
