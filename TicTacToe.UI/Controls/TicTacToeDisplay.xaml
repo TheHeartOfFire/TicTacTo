@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="TicTacToe.UI.Controls.TicTacToeDisplay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TicTacToe.UI.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="562" d:DesignWidth="512" FontFamily="Comic Sans MS">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label x:Name="lblAlert" Content="" HorizontalAlignment="Left" FontSize="24" Foreground="{DynamicResource Text}"/>
+        <Button x:Name="btnReset" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Top" Foreground="{x:Null}" BorderBrush="{x:Null}" Click="btnReset_Click" Background="{DynamicResource Reset}" Visibility="Hidden" />
+        <local:TicTacToeBoard x:Name="ticTacToeBoard" Grid.Row="1" Width="{Binding ActualHeight, ElementName=ticTacToeBoard, Mode=OneWay}" HorizontalAlignment="Center"/>
+
+
+    </Grid>
+</UserControl>
