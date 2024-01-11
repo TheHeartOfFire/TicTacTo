@@ -23,11 +23,19 @@ namespace TicTacToe.UI.Controls
     /// </summary>
     public partial class TicTacToeDisplay : UserControl
     {
+        public TicTacToeDisplay(int size)
+        {
+            InitializeComponent();
+            var board = new TicTacToeBoard(size);
+            grdBoard.Children.Add(board);
+            board.GameEnded += TicTacToeBoard_GameEnded;
+        }
         public TicTacToeDisplay()
         {
             InitializeComponent();
-
-            ticTacToeBoard.GameEnded += TicTacToeBoard_GameEnded;
+            var board = new TicTacToeBoard(3);
+            grdBoard.Children.Add(board);
+            board.GameEnded += TicTacToeBoard_GameEnded;
         }
 
         private void TicTacToeBoard_GameEnded(object sender, GameOverEventArgs e)

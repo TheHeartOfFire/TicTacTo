@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,14 +34,24 @@ namespace TicTacToe.UI.Controls
 
         private Board game = new();
         private bool player1 = true;
-        private readonly Button[] buttons;
-        private readonly Image[] images;
-        private ThemeManager theme;
+        private ThemeManager theme = GetTheme(Theme.BUG);
+        private readonly TicTacToeTile[] tiles;
+        private readonly int size = 3;
+        public TicTacToeBoard(int size)
+        {
+            this.size = size;
+            InitializeComponent();
+            DefineRowsAndCols();
+            GenerateDividers();
+            tiles = GenerateTiles();
+
+            ChangeTheme(Theme.BUG, out theme);
+        }
         public TicTacToeBoard()
         {
             InitializeComponent();
-            buttons = [btnPos0, btnPos1, btnPos2, btnPos3, btnPos4, btnPos5, btnPos6, btnPos7, btnPos8];
-            images = [imgPos0, imgPos1, imgPos2, imgPos3, imgPos4, imgPos5, imgPos6, imgPos7, imgPos8];
+            DefineRowsAndCols();
+            tiles = GenerateTiles();
 
             ChangeTheme(Theme.BUG, out theme);
         }
@@ -65,18 +76,15 @@ namespace TicTacToe.UI.Controls
         /// <param name="result"></param>
         private void DisplayWinner(WinResult result)
         {
-            foreach (var btn in buttons)
-                btn.IsEnabled = false;//disable any remaining buttons
-
-            for (int i = 0; i < images.Length; i++)
+            foreach(var tile in tiles)
             {
-                if (!result.WinningTileIndicies.Contains(i) && result.Winner is not WinResult.WinType.Stalemate)
-                    images[i].Visibility = Visibility.Hidden;//if the game was decisive, show the tiles that make up the win condition
+                tile.btnControl.IsEnabled = false;//disable any remaining buttons
 
-                
+                if (result.WinningTileIndicies.Contains(tile.Index) && result.Winner is not WinResult.WinType.Stalemate)
+                    tile.imgDisplay.Visibility = Visibility.Hidden;//if the game was decisive, show the tiles that make up the win condition
 
                 if (result.Winner is WinResult.WinType.Stalemate)
-                    images[i].Source = (ImageSource)theme.ResDict["Stalemate"];//if the game was a stalemate, fill all tiles with stalemate image
+                    tile.imgDisplay.Source = (ImageSource)theme.ResDict["Stalemate"];//if the game was a stalemate, fill all tiles with stalemate image
             }
         }
         /// <summary>
@@ -103,20 +111,6 @@ namespace TicTacToe.UI.Controls
             UpdatePlayer();//update who the current player is
             GameOver();//Check for a win condition
         }
-
-
-        //Tile buttons
-        private void btnPos0_Click(object sender, RoutedEventArgs e) => TakeTurn(imgPos0, btnPos0, 0);
-        private void btnPos1_Click(object sender, RoutedEventArgs e) => TakeTurn(imgPos1, btnPos1, 1);
-        private void btnPos2_Click(object sender, RoutedEventArgs e) => TakeTurn(imgPos2, btnPos2, 2);
-        private void btnPos3_Click(object sender, RoutedEventArgs e) => TakeTurn(imgPos3, btnPos3, 3);
-        private void btnPos4_Click(object sender, RoutedEventArgs e) => TakeTurn(imgPos4, btnPos4, 4);
-        private void btnPos5_Click(object sender, RoutedEventArgs e) => TakeTurn(imgPos5, btnPos5, 5);
-        private void btnPos6_Click(object sender, RoutedEventArgs e) => TakeTurn(imgPos6, btnPos6, 6);
-        private void btnPos7_Click(object sender, RoutedEventArgs e) => TakeTurn(imgPos7, btnPos7, 7);
-        private void btnPos8_Click(object sender, RoutedEventArgs e) => TakeTurn(imgPos8, btnPos8, 8);
-
-
         /// <summary>
         /// Applies the specified theme to the window
         /// </summary>
@@ -127,39 +121,89 @@ namespace TicTacToe.UI.Controls
         {
             theme = GetTheme(themeType);
 
-            for (int i = 0; i < game.Positions.Length; i++)//update tiles
+            foreach(var tile in tiles)
             {
-                if (game.Positions[i].Owner is TileOwner.Player1)
-                    images[i].Source = (ImageSource)theme.ResDict["Player1"];
-                if (game.Positions[i].Owner is TileOwner.Player2)
-                    images[i].Source = (ImageSource)theme.ResDict["Player2"];
+                if (game.Positions[tile.Index].Owner is not TileOwner.Unclaimed)
+                    tile.imgDisplay.Source = (ImageSource)theme.ResDict[game.Positions[tile.Index].Owner.ToString()];
+
                 if (game.CheckWin().Winner is WinResult.WinType.Stalemate)
-                    images[i].Source = (ImageSource)theme.ResDict["Stalemate"];
+                    tile.imgDisplay.Source = (ImageSource)theme.ResDict["Stalemate"];
             }
+
 
             Cursor = player1 ? theme.Player1Cursor : theme.Player2Cursor;//update cursor
 
-            imgVerticalDivider0.Visibility = theme.UseBorders ? Visibility.Visible : Visibility.Hidden;//All borders' visibility are databound to this one.
         }
         
         public void Reset()
         {
-            foreach (var btn in buttons)//Turn all fo the buttons back on
+            foreach(var tile in tiles)
             {
-
-                btn.Visibility = Visibility.Visible;
-                btn.IsEnabled = true;
-            }
-            foreach (var img in images)//Clear the images
-            {
-                img.Source = null;
-                img.Visibility = Visibility.Visible;
+                tile.btnControl.Visibility = Visibility.Visible;
+                tile.btnControl.IsEnabled = true;
+                tile.imgDisplay.Source = null;
+                tile.imgDisplay.Visibility = Visibility.Visible;
             }
 
             Cursor = theme.Player1Cursor;//reset the cursor
 
             game = new();//Create a new game board to play on
             player1 = true;
+        }
+
+        private TicTacToeTile[] GenerateTiles()
+        {
+            var tiles = new TicTacToeTile[size * size];
+
+            for(int i = 0; i < tiles.Length; i++)
+            {
+                var tile = new TicTacToeTile(i, TakeTurn);
+
+                grdContent.Children.Add(tile);
+
+                Grid.SetRow(tile, i%size);
+                Grid.SetColumn(tile, i/size);
+
+                tiles[i] = tile;
+            }
+
+            return tiles;
+        }
+
+        private void DefineRowsAndCols()
+        {
+            for(int i = 0; i<size; i++)
+            {
+                grdContent.ColumnDefinitions.Add(new ColumnDefinition());
+                grdContent.RowDefinitions.Add(new RowDefinition());
+            }
+        }
+
+        private void GenerateDividers()
+        {
+            for (int i = 0; i < size-1; i++)
+            {
+                var vertical = new Image
+                {
+                    Source = (ImageSource)theme.ResDict["VerticalDivider"],
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    HorizontalAlignment = HorizontalAlignment.Center
+                };
+                var horizontal = new Image
+                {
+                    Source = (ImageSource)theme.ResDict["HorizontalDivider"],
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+
+                Grid.SetRow(horizontal, i);
+                Grid.SetColumnSpan(horizontal, 2);
+                Grid.SetColumn(vertical, i);
+                Grid.SetRowSpan(vertical, 2);
+
+                grdContent.Children.Add(vertical);
+                grdContent.Children.Add(horizontal);
+            }
         }
     }
 }

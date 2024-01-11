@@ -7,7 +7,7 @@ namespace TicTacToe.UI
     {
         private static readonly string themePath = "TicTacToeWPF;component/Assets/Themes/";
         private static readonly ThemeManager[] Themes = [
-        new ThemeManager(Theme.BUG, true),
+        new ThemeManager(Theme.BUG),
             new ThemeManager(Theme.CANDY),
             new ThemeManager(Theme.TRADITIONAL),
             new ThemeManager(Theme.CARD),
@@ -18,7 +18,6 @@ namespace TicTacToe.UI
         public Cursor Player2Cursor { get; }
         public ResourceDictionary ResDict { get; }
         public Theme CurrentTheme { get; }
-        public bool UseBorders { get; }
 
         public enum Theme
         {
@@ -29,7 +28,7 @@ namespace TicTacToe.UI
             SEA
         }
 
-        public ThemeManager(Theme theme, bool useBorders = false)
+        public ThemeManager(Theme theme)
         {
             CurrentTheme = theme;
             ResDict = new ResourceDictionary()
@@ -38,8 +37,6 @@ namespace TicTacToe.UI
             };
             Player1Cursor = new Cursor(Application.GetResourceStream(new Uri(themePath + theme + "/Player1.cur", UriKind.Relative)).Stream);
             Player2Cursor = new Cursor(Application.GetResourceStream(new Uri(themePath + theme + "/Player2.cur", UriKind.Relative)).Stream);
-            UseBorders = useBorders;
-
         }
 
         public static ThemeManager GetTheme(Theme theme)
