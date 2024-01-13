@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Squirrel;
 using TicTacToe.Core;
+using TicTacToe.UI.Controls;
 using static TicTacToe.Core.Tile;
 using static TicTacToe.UI.ThemeManager;
 
@@ -15,7 +16,9 @@ namespace TicTacToe.UI;
 /// </summary>
 public partial class MainWindow : Window
 {
+    private const string repoUrl = "https://github.com/TheHeartOfFire/TicTacToe";
     private ThemeManager Theme;
+    private TicTacToeDisplay game;
 
     public MainWindow()
     {
@@ -23,10 +26,16 @@ public partial class MainWindow : Window
         
         CheckForUpdates().ConfigureAwait(false);
         AddVersionNumber();
+
+
+        game = new TicTacToeDisplay();
+        Grid.SetRow(game, 1);
+        grdGame.Children.Add(game);
+
         ChangeTheme(ThemeManager.Theme.BUG, out Theme);
+
     }
    
-
     /// <summary>
     /// Applies the specified theme to the window
     /// </summary>
@@ -39,7 +48,7 @@ public partial class MainWindow : Window
         Application.Current.Resources.Clear();
         Application.Current.Resources.MergedDictionaries.Add(Theme.ResDict);//Change the active resource dictionary
 
-        ctrlBoard.ChangeTheme(themeType);
+        game.ChangeTheme(themeType);
     }
     //Menu Items
 
@@ -57,7 +66,7 @@ public partial class MainWindow : Window
 
     private async Task CheckForUpdates()
     {
-        using var manager = await UpdateManager.GitHubUpdateManager("https://github.com/TheHeartOfFire/TicTacToe");
+        using var manager = await UpdateManager.GitHubUpdateManager(repoUrl);
 
             await manager.UpdateApp();
     } 

@@ -7,13 +7,12 @@
         mc:Ignorable="d"
         Title="Tic Tac Toe" Height="580" Width="512" Foreground="{x:Null}" Background="{DynamicResource Background}" Icon="/Assets/TTTIcon.png">
 
-    <Grid>
+    <Grid x:Name="grdGame">
         <Grid.RowDefinitions>
             <RowDefinition Height="18"/>
             <RowDefinition Height="562*"/>
         </Grid.RowDefinitions>
         
-        <controls:TicTacToeDisplay x:Name="ctrlBoard" Grid.Row="1" />
         
         <Menu Cursor="Arrow" ForceCursor="True" HorizontalContentAlignment="Stretch" Grid.ColumnSpan="2">
             <MenuItem Header="_Theme" FontFamily="Comic Sans MS">

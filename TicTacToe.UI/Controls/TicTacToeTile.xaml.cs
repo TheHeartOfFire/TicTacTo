@@ -21,8 +21,8 @@ namespace TicTacToe.UI.Controls
     public partial class TicTacToeTile : UserControl
     {
         public readonly int Index;
-        private readonly Action<Image, Button, int> takeTurn;
-        public TicTacToeTile(int index, Action<Image, Button, int> takeTurn)
+        private readonly Action<TicTacToeTile, int> takeTurn;
+        public TicTacToeTile(int index, Action<TicTacToeTile, int> takeTurn)
         {
             InitializeComponent();
             Index = index;
@@ -30,7 +30,7 @@ namespace TicTacToe.UI.Controls
         }
 
         public void UpdateImage(ImageSource image) => imgDisplay.Source = image;
-        private void btnControl_Click(object sender, RoutedEventArgs e) => takeTurn(imgDisplay, btnControl, Index);
-        
+        private void btnControl_Click(object sender, RoutedEventArgs e) => takeTurn(this, Index);
+
     }
 }

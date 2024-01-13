@@ -40,6 +40,7 @@ namespace TicTacToe.UI.Controls
         public TicTacToeBoard(int size)
         {
             this.size = size;
+            game = new(size);
             InitializeComponent();
             DefineRowsAndCols();
             GenerateDividers();
@@ -49,8 +50,10 @@ namespace TicTacToe.UI.Controls
         }
         public TicTacToeBoard()
         {
+            game = new(size);
             InitializeComponent();
             DefineRowsAndCols();
+            GenerateDividers();
             tiles = GenerateTiles();
 
             ChangeTheme(Theme.BUG, out theme);
@@ -76,15 +79,18 @@ namespace TicTacToe.UI.Controls
         /// <param name="result"></param>
         private void DisplayWinner(WinResult result)
         {
+
+
             foreach(var tile in tiles)
             {
                 tile.btnControl.IsEnabled = false;//disable any remaining buttons
 
-                if (result.WinningTileIndicies.Contains(tile.Index) && result.Winner is not WinResult.WinType.Stalemate)
-                    tile.imgDisplay.Visibility = Visibility.Hidden;//if the game was decisive, show the tiles that make up the win condition
-
                 if (result.Winner is WinResult.WinType.Stalemate)
                     tile.imgDisplay.Source = (ImageSource)theme.ResDict["Stalemate"];//if the game was a stalemate, fill all tiles with stalemate image
+
+                if (!game.Positions[tile.Index].WinningTile && result.Winner is not WinResult.WinType.Stalemate)
+                    tile.imgDisplay.Visibility = Visibility.Hidden;//if the game was decisive, show the tiles that make up the win condition
+
             }
         }
         /// <summary>
@@ -102,15 +108,17 @@ namespace TicTacToe.UI.Controls
         /// <param name="img"></param>
         /// <param name="btn"></param>
         /// <param name="pos"></param>
-        private void TakeTurn(Image img, Button btn, int pos)
+        private void TakeTurn(TicTacToeTile tile, int pos)
         {
-            game.TakeTurn(player1 ? TileOwner.Player1 : TileOwner.Player2, pos);//process the turn
-            img.Source = player1 ? (ImageSource)theme.ResDict["Player1"] : (ImageSource)theme.ResDict["Player2"];//set the tile's image to the icon for the current player
 
-            btn.IsEnabled = false;//disable the button so that this tile can't be chosen again this game
+            game.TakeTurn(player1 ? TileOwner.Player1 : TileOwner.Player2, pos);//process the turn
+            tile.UpdateImage( player1 ? (ImageSource)theme.ResDict["Player1"] : (ImageSource)theme.ResDict["Player2"]);//set the tile's image to the icon for the current player
+
+            tile.btnControl.IsEnabled = false;//disable the button so that this tile can't be chosen again this game
             UpdatePlayer();//update who the current player is
             GameOver();//Check for a win condition
         }
+
         /// <summary>
         /// Applies the specified theme to the window
         /// </summary>
@@ -147,7 +155,7 @@ namespace TicTacToe.UI.Controls
 
             Cursor = theme.Player1Cursor;//reset the cursor
 
-            game = new();//Create a new game board to play on
+            game = new(size);//Create a new game board to play on
             player1 = true;
         }
 
@@ -187,19 +195,25 @@ namespace TicTacToe.UI.Controls
                 {
                     Source = (ImageSource)theme.ResDict["VerticalDivider"],
                     VerticalAlignment = VerticalAlignment.Stretch,
-                    HorizontalAlignment = HorizontalAlignment.Center
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    Height = double.NaN,
+                    Width = double.NaN
                 };
                 var horizontal = new Image
                 {
                     Source = (ImageSource)theme.ResDict["HorizontalDivider"],
                     HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Center
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Height = double.NaN,
+                    Width = double.NaN
                 };
 
                 Grid.SetRow(horizontal, i);
-                Grid.SetColumnSpan(horizontal, 2);
+                Grid.SetColumnSpan(horizontal, size);
+                Grid.SetRowSpan(horizontal, 2);
                 Grid.SetColumn(vertical, i);
-                Grid.SetRowSpan(vertical, 2);
+                Grid.SetRowSpan(vertical, size);
+                Grid.SetColumnSpan(vertical, 2);
 
                 grdContent.Children.Add(vertical);
                 grdContent.Children.Add(horizontal);

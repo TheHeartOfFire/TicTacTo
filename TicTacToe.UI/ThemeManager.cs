@@ -13,7 +13,7 @@ namespace TicTacToe.UI
             new ThemeManager(Theme.CARD),
             new ThemeManager(Theme.SEA)
         ];
-
+        //TODO: Public Static Theme CurrentTheme;
         public Cursor Player1Cursor { get; }
         public Cursor Player2Cursor { get; }
         public ResourceDictionary ResDict { get; }

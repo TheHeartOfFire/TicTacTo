@@ -13,8 +13,7 @@
         </Grid.RowDefinitions>
         <Label x:Name="lblAlert" Content="" HorizontalAlignment="Left" FontSize="24" Foreground="{DynamicResource Text}"/>
         <Button x:Name="btnReset" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Top" Foreground="{x:Null}" BorderBrush="{x:Null}" Click="btnReset_Click" Background="{DynamicResource Reset}" Visibility="Hidden" />
-        <Grid x:Name="grdBoard"/>
-        <local:TicTacToeBoard x:Name="ticTacToeBoard" Grid.Row="1" Width="{Binding ActualHeight, ElementName=ticTacToeBoard, Mode=OneWay}" HorizontalAlignment="Center"/>
+        <Grid x:Name="grdBoard" Grid.Row="1"/>
 
 
     </Grid>

@@ -23,20 +23,29 @@ namespace TicTacToe.UI.Controls
     /// </summary>
     public partial class TicTacToeDisplay : UserControl
     {
+        private TicTacToeBoard board;
+
         public TicTacToeDisplay(int size)
         {
             InitializeComponent();
-            var board = new TicTacToeBoard(size);
+            board = new TicTacToeBoard(size);
             grdBoard.Children.Add(board);
+            Grid.SetRow(board, 1);
+            board.VerticalAlignment = VerticalAlignment.Stretch;
+            board.HorizontalAlignment = HorizontalAlignment.Stretch;
             board.GameEnded += TicTacToeBoard_GameEnded;
         }
         public TicTacToeDisplay()
         {
             InitializeComponent();
-            var board = new TicTacToeBoard(3);
+            board = new TicTacToeBoard(3);
             grdBoard.Children.Add(board);
+            Grid.SetRow(board, 1);
+            board.VerticalAlignment = VerticalAlignment.Stretch;
+            board.HorizontalAlignment = HorizontalAlignment.Stretch;
             board.GameEnded += TicTacToeBoard_GameEnded;
         }
+
 
         private void TicTacToeBoard_GameEnded(object sender, GameOverEventArgs e)
         {
@@ -50,7 +59,7 @@ namespace TicTacToe.UI.Controls
 
         public void ChangeTheme(Theme theme)
         {
-            ticTacToeBoard.ChangeTheme(theme);
+            board.ChangeTheme(theme);
         }
 
         /// <summary>
@@ -64,7 +73,7 @@ namespace TicTacToe.UI.Controls
 
             lblAlert.Content = "";//This label is only visible at the end of the game.
 
-            ticTacToeBoard.Reset();
+            board.Reset();
             
         }
     }
