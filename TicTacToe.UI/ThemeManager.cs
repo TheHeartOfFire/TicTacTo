@@ -3,50 +3,21 @@ using System.Windows.Input;
 
 namespace TicTacToe.UI
 {
-    public class ThemeManager(Cursor player1Cursor, Cursor player2Cursor, ResourceDictionary resDict, ThemeManager.Theme theme)
+    public class ThemeManager
     {
+        private static readonly string themePath = "TicTacToeWPF;component/Assets/Themes/";
         private static readonly ThemeManager[] Themes = [
-        new ThemeManager(
-            new Cursor(Application.GetResourceStream(new Uri("Assets/Themes/Bug/Player1.cur", UriKind.Relative)).Stream),
-            new Cursor(Application.GetResourceStream(new Uri("Assets/Themes/Bug/Player2.cur", UriKind.Relative)).Stream),
-            new ResourceDictionary()
-            {
-                Source = new Uri("Assets/Themes/Bug/Theme.xaml", UriKind.Relative)
-            }, Theme.BUG),
-            new ThemeManager(
-            new Cursor(Application.GetResourceStream(new Uri("Assets/Themes/Candy/Player1.cur", UriKind.Relative)).Stream),
-            new Cursor(Application.GetResourceStream(new Uri("Assets/Themes/Candy/Player2.cur", UriKind.Relative)).Stream),
-            new ResourceDictionary()
-            {
-                Source = new Uri("Assets/Themes/Candy/Theme.xaml", UriKind.Relative)
-            }, Theme.CANDY),
-            new ThemeManager(
-            new Cursor(Application.GetResourceStream(new Uri("Assets/Themes/Traditional/Player1.cur", UriKind.Relative)).Stream),
-            new Cursor(Application.GetResourceStream(new Uri("Assets/Themes/Traditional/Player2.cur", UriKind.Relative)).Stream),
-            new ResourceDictionary()
-            {
-                Source = new Uri("Assets/Themes/Traditional/Theme.xaml", UriKind.Relative)
-            }, Theme.TRADITIONAL),
-            new ThemeManager(
-            new Cursor(Application.GetResourceStream(new Uri("Assets/Themes/Card/Player1.cur", UriKind.Relative)).Stream),
-            new Cursor(Application.GetResourceStream(new Uri("Assets/Themes/Card/Player2.cur", UriKind.Relative)).Stream),
-            new ResourceDictionary()
-            {
-                Source = new Uri("Assets/Themes/Card/Theme.xaml", UriKind.Relative)
-            }, Theme.CARD),
-            new ThemeManager(
-            new Cursor(Application.GetResourceStream(new Uri("Assets/Themes/Sea/Player1.cur", UriKind.Relative)).Stream),
-            new Cursor(Application.GetResourceStream(new Uri("Assets/Themes/Sea/Player2.cur", UriKind.Relative)).Stream),
-            new ResourceDictionary()
-            {
-                Source = new Uri("Assets/Themes/Sea/Theme.xaml", UriKind.Relative)
-            }, Theme.SEA)
+        new ThemeManager(Theme.BUG),
+            new ThemeManager(Theme.CANDY),
+            new ThemeManager(Theme.TRADITIONAL),
+            new ThemeManager(Theme.CARD),
+            new ThemeManager(Theme.SEA)
         ];
-
-        public Cursor Player1Cursor { get; } = player1Cursor;
-        public Cursor Player2Cursor { get; } = player2Cursor;
-        public ResourceDictionary ResDict { get; } = resDict;
-        public Theme CurrentTheme { get; } = theme;
+        //TODO: Public Static Theme CurrentTheme;
+        public Cursor Player1Cursor { get; }
+        public Cursor Player2Cursor { get; }
+        public ResourceDictionary ResDict { get; }
+        public Theme CurrentTheme { get; }
 
         public enum Theme
         {
@@ -55,6 +26,17 @@ namespace TicTacToe.UI
             TRADITIONAL,
             CARD,
             SEA
+        }
+
+        public ThemeManager(Theme theme)
+        {
+            CurrentTheme = theme;
+            ResDict = new ResourceDictionary()
+            {
+                Source = new Uri(themePath + theme + "/Theme.xaml", UriKind.Relative)
+            };
+            Player1Cursor = new Cursor(Application.GetResourceStream(new Uri(themePath + theme + "/Player1.cur", UriKind.Relative)).Stream);
+            Player2Cursor = new Cursor(Application.GetResourceStream(new Uri(themePath + theme + "/Player2.cur", UriKind.Relative)).Stream);
         }
 
         public static ThemeManager GetTheme(Theme theme)

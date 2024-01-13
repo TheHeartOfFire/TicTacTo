@@ -3,127 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TicTacToe.UI"
+        xmlns:local="clr-namespace:TicTacToe.UI" xmlns:controls="clr-namespace:TicTacToe.UI.Controls"
         mc:Ignorable="d"
-        Title="Tic Tac Toe" Height="512" Width="512" Foreground="{x:Null}" ResizeMode="CanMinimize" Background="{DynamicResource Background}" Icon="/Assets/TTTIcon.png">
-    <Window.Resources>
-        <Style x:Key="FocusVisual">
-            <Setter Property="Control.Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
-        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
-        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
-        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
-        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
-        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
-        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#00000000"/>
-        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#00000000"/>
-        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#00000000"/>
-        <Style x:Key="TTTButton" TargetType="{x:Type Button}">
-            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="1"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
-                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsDefaulted" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
-                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        
-    </Window.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+        Title="Tic Tac Toe" Height="580" Width="512" Foreground="{x:Null}" Background="{DynamicResource Background}" Icon="/Assets/TTTIcon.png">
+
+    <Grid x:Name="grdGame">
         <Grid.RowDefinitions>
             <RowDefinition Height="18"/>
-            <RowDefinition Height="33*"/>
-            <RowDefinition Height="401*"/>
+            <RowDefinition Height="562*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.ColumnSpan="2" Margin="0,34,0,0" Grid.RowSpan="2" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Button Style="{DynamicResource TTTButton}" x:Name="btnPos0" Margin="5,5,5,5" BorderBrush="{x:Null}" Click="btnPos0_Click" Foreground="{x:Null}" Background="#3F000000" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                <Image x:Name="imgPos0" Width="100" Height="100" />
-            </Button>
-            <Button Style="{DynamicResource TTTButton}" x:Name="btnPos1" Grid.Column="1" Padding="5,5,5,5" Margin="5,5,5,5" BorderBrush="{x:Null}" Click="btnPos1_Click" Foreground="{x:Null}" Background="#3F000000">
-                <Image x:Name="imgPos1" Height="100" Width="100"/>
-            </Button>
-            <Button Style="{DynamicResource TTTButton}" x:Name="btnPos2" Grid.Column="2" Margin="5,5,5,5" BorderBrush="{x:Null}" Click="btnPos2_Click" Foreground="{x:Null}" Background="#3F000000">
-                <Image x:Name="imgPos2" Height="100" Width="100"/>
-            </Button>
-            <Button Style="{DynamicResource TTTButton}" x:Name="btnPos3" Grid.Row="1" Margin="5,5,5,5" BorderBrush="{x:Null}" Click="btnPos3_Click" Foreground="{x:Null}" Background="#3F000000">
-                <Image x:Name="imgPos3" Height="100" Width="100"/>
-            </Button>
-            <Button Style="{DynamicResource TTTButton}" x:Name="btnPos4" Grid.Column="1" Grid.Row="1" Margin="5,5,5,5" BorderBrush="{x:Null}" Click="btnPos4_Click" Foreground="{x:Null}" Background="#3F000000">
-                <Image x:Name="imgPos4" Height="100" Width="100"/>
-            </Button>
-            <Button Style="{DynamicResource TTTButton}" x:Name="btnPos5" Grid.Column="2" Grid.Row="1"  Margin="5,5,5,5" BorderBrush="{x:Null}" Click="btnPos5_Click" Foreground="{x:Null}" Background="#3F000000">
-                <Image x:Name="imgPos5" Height="100" Width="100"/>
-            </Button>
-            <Button Style="{DynamicResource TTTButton}" x:Name="btnPos6" Grid.Row="2"  Margin="5,5,5,5" BorderBrush="{x:Null}" Click="btnPos6_Click" Foreground="{x:Null}" Background="#3F000000">
-                <Image x:Name="imgPos6" Height="100" Width="100"/>
-            </Button>
-            <Button Style="{DynamicResource TTTButton}" x:Name="btnPos7" Grid.Column="1" Grid.Row="2" Margin="5,5,5,5" BorderBrush="{x:Null}" Click="btnPos7_Click" Foreground="{x:Null}" Background="#3F000000">
-                <Image x:Name="imgPos7" Height="100" Width="100"/>
-            </Button>
-            <Button Style="{DynamicResource TTTButton}" x:Name="btnPos8" Grid.Column="2" Grid.Row="2" Margin="5,5,5,5" BorderBrush="{x:Null}" Click="btnPos8_Click" Foreground="{x:Null}" Background="#3F000000">
-                <Image x:Name="imgPos8" Height="100" Width="100"/>
-            </Button>
-            <Image x:Name="imgVerticalDivider0" HorizontalAlignment="Left" Grid.RowSpan="3" Width="100"  Margin="-50,0,0,0" IsHitTestVisible="False" Source="{DynamicResource VerticalDivider}"/>
-            <Image x:Name="imgVerticalDivider3" HorizontalAlignment="Right" Width="100"  Grid.Column="2" Margin="0,0,-42,0" Grid.RowSpan="3" IsHitTestVisible="False" Source="{DynamicResource VerticalDivider}"/>
-            <Image x:Name="imgHorizontalDivider0" Grid.ColumnSpan="3"  VerticalAlignment="Top" Margin="0,-42,0,0" IsHitTestVisible="False" Source="{DynamicResource HorizontalDivider}"/>
-            <Image x:Name="imgHorizontalDivider3" Grid.ColumnSpan="3"  VerticalAlignment="Bottom" Grid.Row="2" Margin="0,0,0,-42" IsHitTestVisible="False" Source="{DynamicResource HorizontalDivider}"/>
-            <Image x:Name="imgHorizontalDivider1" Grid.ColumnSpan="3" Grid.RowSpan="2"  IsHitTestVisible="False" Source="{DynamicResource HorizontalDivider}"/>
-            <Image x:Name="imgHorizontalDivider2" Grid.ColumnSpan="3" Grid.RowSpan="2" Grid.Row="1" IsHitTestVisible="False" Source="{DynamicResource HorizontalDivider}"/>
-            <Image x:Name="imgVerticalDivider1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Grid.RowSpan="3" Width="100"  IsHitTestVisible="False" Source="{DynamicResource VerticalDivider}"/>
-            <Image x:Name="imgVerticalDivider2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Grid.RowSpan="3" Width="100"  Grid.Column="1" IsHitTestVisible="False" Source="{DynamicResource VerticalDivider}"/>
-        </Grid>
-        <Label x:Name="lblDisplay" Content="" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="24" Padding="0,0,0,0" Foreground="{DynamicResource Text}" FontFamily="Comic Sans MS" FontWeight="Bold" Height="34" VerticalAlignment="Center" Background="#7F000000" Grid.Row="1" />
-        <Button x:Name="btnReset" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Top" Foreground="{x:Null}" BorderBrush="{x:Null}" Click="btnReset_Click" Grid.Column="1" Grid.Row="1" Visibility="Hidden" Background="{DynamicResource Reset}" />
-         <Menu Cursor="Arrow" ForceCursor="True" HorizontalContentAlignment="Stretch" Grid.ColumnSpan="2">
+        
+        
+        <Menu Cursor="Arrow" ForceCursor="True" HorizontalContentAlignment="Stretch" Grid.ColumnSpan="2">
             <MenuItem Header="_Theme" FontFamily="Comic Sans MS">
                 <MenuItem x:Name="menuBugTheme" Header="_Wooded Wonderland" Click="menuBugTheme_Click" />
                 <MenuItem x:Name="menuCandyTheme" Header="_Candy Kingdom" Click="menuCandyTheme_Click"/>
