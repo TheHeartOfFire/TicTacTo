@@ -20,6 +20,8 @@ public class Board
     
     public Tile[] Positions => positions;
 
+    public bool IsImminentStalemate = false;
+
     private readonly int boardSize;
 
     private Tile lastTilePlayed;
@@ -65,6 +67,7 @@ public class Board
     public WinResult CheckWin()
     {
         WinCondition.TrimImpossibleConditions(Positions);
+        IsImminentStalemate = !WinCondition.IsWinPossible();
 
         //The shortest possible game is after player 1 has player boardSize number of times, during which Player 2 will have player boardSize - 1 times.
         //This means that the minimum game length is (boardSize * 2) -1

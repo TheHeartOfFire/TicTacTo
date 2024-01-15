@@ -34,7 +34,14 @@ public class WinCondition(int[] positions)
     {
         foreach(var condition in WinConditions)
             condition.CheckIfPossible(board);
-
+    }
+    
+    public static bool IsWinPossible()
+    {
+        //if there are no more possible win conditions then a stalemate is unavoidable.
+        foreach(var condition in WinConditions)
+            if(condition.IsPossible) return true;
+        return false;
     }
 
     /// <summary>

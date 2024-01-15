@@ -34,7 +34,14 @@ namespace TicTacToe.UI.Controls
             board.VerticalAlignment = VerticalAlignment.Stretch;
             board.HorizontalAlignment = HorizontalAlignment.Stretch;
             board.GameEnded += TicTacToeBoard_GameEnded;
+            board.StalemateImminent += Board_StalemateImminent;
         }
+
+        private void Board_StalemateImminent()
+        {
+            lblAlert.Content = "Stalemate!";
+        }
+
         public TicTacToeDisplay()
         {
             InitializeComponent();
