@@ -32,6 +32,11 @@ namespace TicTacToe.UI.Controls
         public event GameOverEventHandler? GameEnded;
         protected virtual void OnGameOver(GameOverEventArgs e) => GameEnded?.Invoke(this, e);
 
+        public delegate void Notify();
+        public event Notify StalemateImminent;
+        protected virtual void OnStalemateImminent() => StalemateImminent?.Invoke();
+
+
         private Board game = new();
         private bool player1 = true;
         private readonly TicTacToeTile[] tiles;
@@ -123,6 +128,8 @@ namespace TicTacToe.UI.Controls
             tile.btnControl.IsEnabled = false;//disable the button so that this tile can't be chosen again this game
             UpdatePlayer();//update who the current player is
             GameOver();//Check for a win condition
+            if(game.IsImminentStalemate) 
+                OnStalemateImminent();
         }
 
 
@@ -167,8 +174,8 @@ namespace TicTacToe.UI.Controls
 
                 grdContent.Children.Add(tile);
 
-                Grid.SetRow(tile, i%size);
-                Grid.SetColumn(tile, i/size);
+                Grid.SetRow(tile, i/size);
+                Grid.SetColumn(tile, i%size);
 
                 tiles[i] = tile;
             }
