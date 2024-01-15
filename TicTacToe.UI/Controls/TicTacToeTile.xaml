@@ -64,6 +64,6 @@
         </Style>
     </UserControl.Resources>
     <Button Style="{DynamicResource TTTButton}" x:Name="btnControl" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Background="#01FFFFFF" BorderBrush="{x:Null}" Foreground="{x:Null}" Height="{Binding ActualWidth, ElementName=btnControl, Mode=OneWay}" Click="btnControl_Click" MinHeight="50" MinWidth="50" Padding="0,0,0,0" FontSize="48">
-        <Image x:Name="imgDisplay" IsHitTestVisible="False" MinWidth="50" MinHeight="50"/>
+        <Image x:Name="imgDisplay" IsHitTestVisible="False" MinWidth="50" MinHeight="50" Stretch="Uniform" Margin="10"/>
     </Button>
 </UserControl>

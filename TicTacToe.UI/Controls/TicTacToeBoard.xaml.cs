@@ -34,7 +34,6 @@ namespace TicTacToe.UI.Controls
 
         private Board game = new();
         private bool player1 = true;
-        private ThemeManager theme = GetTheme(Theme.BUG);
         private readonly TicTacToeTile[] tiles;
         private readonly int size = 3;
         public TicTacToeBoard(int size)
@@ -45,9 +44,18 @@ namespace TicTacToe.UI.Controls
             DefineRowsAndCols();
             GenerateDividers();
             tiles = GenerateTiles();
-
-            ChangeTheme(Theme.BUG, out theme);
+            ActiveTheme.ThemeChanged += ActiveTheme_ThemeChanged;
         }
+
+        private void ActiveTheme_ThemeChanged(object? sender, System.EventArgs e)
+        {
+            if (sender is null) return;
+
+            (sender as ThemeManager).ThemeChanged -= ActiveTheme_ThemeChanged;
+            ActiveTheme.ThemeChanged += ActiveTheme_ThemeChanged;
+            ChangeTheme();
+        } 
+
         public TicTacToeBoard()
         {
             game = new(size);
@@ -55,8 +63,6 @@ namespace TicTacToe.UI.Controls
             DefineRowsAndCols();
             GenerateDividers();
             tiles = GenerateTiles();
-
-            ChangeTheme(Theme.BUG, out theme);
         }
 
         /// <summary>
@@ -86,7 +92,7 @@ namespace TicTacToe.UI.Controls
                 tile.btnControl.IsEnabled = false;//disable any remaining buttons
 
                 if (result.Winner is WinResult.WinType.Stalemate)
-                    tile.imgDisplay.Source = (ImageSource)theme.ResDict["Stalemate"];//if the game was a stalemate, fill all tiles with stalemate image
+                    tile.imgDisplay.Source = (ImageSource)ActiveTheme.ResDict["Stalemate"];//if the game was a stalemate, fill all tiles with stalemate image
 
                 if (!game.Positions[tile.Index].WinningTile && result.Winner is not WinResult.WinType.Stalemate)
                     tile.imgDisplay.Visibility = Visibility.Hidden;//if the game was decisive, show the tiles that make up the win condition
@@ -99,7 +105,7 @@ namespace TicTacToe.UI.Controls
         private void UpdatePlayer()
         {
             player1 = !player1;//Alternate which player is currently playing
-            Cursor = player1 ? theme.Player1Cursor : theme.Player2Cursor;//Update the cursor to match the current player
+            Cursor = player1 ? ActiveTheme.Player1Cursor : ActiveTheme.Player2Cursor;//Update the cursor to match the current player
         }
 
         /// <summary>
@@ -112,35 +118,27 @@ namespace TicTacToe.UI.Controls
         {
 
             game.TakeTurn(player1 ? TileOwner.Player1 : TileOwner.Player2, pos);//process the turn
-            tile.UpdateImage( player1 ? (ImageSource)theme.ResDict["Player1"] : (ImageSource)theme.ResDict["Player2"]);//set the tile's image to the icon for the current player
+            tile.UpdateImage( player1 ? (ImageSource)ActiveTheme.ResDict["Player1"] : (ImageSource)ActiveTheme.ResDict["Player2"]);//set the tile's image to the icon for the current player
 
             tile.btnControl.IsEnabled = false;//disable the button so that this tile can't be chosen again this game
             UpdatePlayer();//update who the current player is
             GameOver();//Check for a win condition
         }
 
-        /// <summary>
-        /// Applies the specified theme to the window
-        /// </summary>
-        /// <param name="themeType"></param>
-        public void ChangeTheme(Theme themeType) => ChangeTheme(themeType, out theme);
 
-        private void ChangeTheme(Theme themeType, out ThemeManager theme)
+        private void ChangeTheme()
         {
-            theme = GetTheme(themeType);
-
             foreach(var tile in tiles)
             {
                 if (game.Positions[tile.Index].Owner is not TileOwner.Unclaimed)
-                    tile.imgDisplay.Source = (ImageSource)theme.ResDict[game.Positions[tile.Index].Owner.ToString()];
+                    tile.imgDisplay.Source = (ImageSource)ActiveTheme.ResDict[game.Positions[tile.Index].Owner.ToString()];
 
                 if (game.CheckWin().Winner is WinResult.WinType.Stalemate)
-                    tile.imgDisplay.Source = (ImageSource)theme.ResDict["Stalemate"];
+                    tile.imgDisplay.Source = (ImageSource)ActiveTheme.ResDict["Stalemate"];
             }
 
 
-            Cursor = player1 ? theme.Player1Cursor : theme.Player2Cursor;//update cursor
-
+            Cursor = player1 ? ActiveTheme.Player1Cursor : ActiveTheme.Player2Cursor;//update cursor
         }
         
         public void Reset()
@@ -153,7 +151,7 @@ namespace TicTacToe.UI.Controls
                 tile.imgDisplay.Visibility = Visibility.Visible;
             }
 
-            Cursor = theme.Player1Cursor;//reset the cursor
+            Cursor = ActiveTheme.Player1Cursor;//reset the cursor
 
             game = new(size);//Create a new game board to play on
             player1 = true;
@@ -193,20 +191,20 @@ namespace TicTacToe.UI.Controls
             {
                 var vertical = new Image
                 {
-                    Source = (ImageSource)theme.ResDict["VerticalDivider"],
                     VerticalAlignment = VerticalAlignment.Stretch,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     Height = double.NaN,
                     Width = double.NaN
                 };
+                vertical.SetResourceReference(Image.SourceProperty, "VerticalDivider");
                 var horizontal = new Image
                 {
-                    Source = (ImageSource)theme.ResDict["HorizontalDivider"],
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     VerticalAlignment = VerticalAlignment.Center,
                     Height = double.NaN,
                     Width = double.NaN
                 };
+                horizontal.SetResourceReference(Image.SourceProperty, "HorizontalDivider");
 
                 Grid.SetRow(horizontal, i);
                 Grid.SetColumnSpan(horizontal, size);

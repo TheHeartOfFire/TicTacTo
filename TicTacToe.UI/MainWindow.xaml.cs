@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Drawing;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,8 +18,6 @@ namespace TicTacToe.UI;
 public partial class MainWindow : Window
 {
     private const string repoUrl = "https://github.com/TheHeartOfFire/TicTacToe";
-    private ThemeManager Theme;
-    private TicTacToeDisplay game;
 
     public MainWindow()
     {
@@ -27,40 +26,20 @@ public partial class MainWindow : Window
         CheckForUpdates().ConfigureAwait(false);
         AddVersionNumber();
 
-
-        game = new TicTacToeDisplay();
-        Grid.SetRow(game, 1);
+        var game = new TicTacToeDisplay();
         grdGame.Children.Add(game);
-
-        ChangeTheme(ThemeManager.Theme.BUG, out Theme);
-
-    }
-   
-    /// <summary>
-    /// Applies the specified theme to the window
-    /// </summary>
-    /// <param name="themeType"></param>
-    private void ChangeTheme(Theme themeType)=>ChangeTheme(themeType, out Theme);
-
-    private void ChangeTheme(Theme themeType, out ThemeManager theme)
-    {
-        theme = GetTheme(themeType);
-        Application.Current.Resources.Clear();
-        Application.Current.Resources.MergedDictionaries.Add(Theme.ResDict);//Change the active resource dictionary
-
-        game.ChangeTheme(themeType);
     }
     //Menu Items
 
     //Themes
-    private void menuBugTheme_Click(object sender, RoutedEventArgs e) => ChangeTheme(ThemeManager.Theme.BUG);
-    private void menuCandyTheme_Click(object sender, RoutedEventArgs e) => ChangeTheme(ThemeManager.Theme.CANDY);
-    private void menuTraditionalTheme_Click(object sender, RoutedEventArgs e) => ChangeTheme(ThemeManager.Theme.TRADITIONAL);
-    private void menuSeaTheme_Click(object sender, RoutedEventArgs e) => ChangeTheme(ThemeManager.Theme.SEA);
-    private void menuCardTheme_Click(object sender, RoutedEventArgs e) => ChangeTheme(ThemeManager.Theme.CARD);
+    private void menuBugTheme_Click(object sender, RoutedEventArgs e) => SetTheme(Theme.BUG);
+    private void menuCandyTheme_Click(object sender, RoutedEventArgs e) => SetTheme(Theme.CANDY);
+    private void menuTraditionalTheme_Click(object sender, RoutedEventArgs e) => SetTheme(Theme.TRADITIONAL);
+    private void menuSeaTheme_Click(object sender, RoutedEventArgs e) => SetTheme(Theme.SEA);
+    private void menuCardTheme_Click(object sender, RoutedEventArgs e) => SetTheme(Theme.CARD);
 
     //Tools
-    private void menuCoinToss_Click(object sender, RoutedEventArgs e) => Debug.WriteLine(e.OriginalSource);//new CoinToss(theme).Show();
+    private void menuCoinToss_Click(object sender, RoutedEventArgs e) => new CoinToss().Show();
 
     private void menuInstructions_Click(object sender, RoutedEventArgs e) => new Instructions().Show();
 
@@ -76,5 +55,26 @@ public partial class MainWindow : Window
         var assembly = Assembly.GetExecutingAssembly();
         var versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
         Title = Title + " " + versionInfo.FileVersion;
+    }
+
+    private void menuSize3_Checked(object sender, RoutedEventArgs e) => ChangeBoardSize(menuSize3);
+
+    private void menuSize4_Checked(object sender, RoutedEventArgs e) => ChangeBoardSize(menuSize4, 4);
+
+    private void menuSize5_Checked(object sender, RoutedEventArgs e) => ChangeBoardSize(menuSize5, 5);
+
+    private void menuSize6_Checked(object sender, RoutedEventArgs e) => ChangeBoardSize(menuSize6, 6);
+
+    private void ChangeBoardSize(MenuItem selectedItem, int size = 3)
+    {
+        if (grdGame is null) return;//omit call from initializing menuSize3 being defaulted to isChecked = true;
+
+        foreach (MenuItem item in menuSize.Items)
+            if (!item.Name.Equals(selectedItem.Name))
+                item.IsChecked = false;
+
+        grdGame.Children.Clear();
+        var game = new TicTacToeDisplay(size);
+        grdGame.Children.Add(game);
     }
 }
