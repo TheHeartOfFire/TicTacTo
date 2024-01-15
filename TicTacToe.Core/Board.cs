@@ -53,6 +53,7 @@ public class Board
         int counter = 0;
         //Find rows
 
+        // Board        Desired    Equation
         // 0 | 1 | 2    0, 1, 2    i = row
         // 3 | 4 | 5 => 3, 4, 5 => j = col
         // 6 | 7 | 8    6, 7, 8    (i * size) + j
@@ -68,6 +69,7 @@ public class Board
 
         //Find cols
 
+        // Board        Desired    Equation
         // 0 | 1 | 2    0, 3, 6    i = col
         // 3 | 4 | 5 => 1, 4, 7 => j = row
         // 6 | 7 | 8    2, 5, 8    i + (j * size)
@@ -85,6 +87,8 @@ public class Board
 
         winConditions[counter] = new int[size];
         winConditions[counter + 1] = new int[size];
+
+        // Board        Desired    Equation
         // 0 | 1 | 2    0, 4, 8    (i * size) + i
         // 3 | 4 | 5 =>         => 
         // 6 | 7 | 8    6, 4, 2    (size * i) + (size - 1 - i)

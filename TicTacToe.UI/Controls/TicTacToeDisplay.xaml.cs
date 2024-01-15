@@ -57,11 +57,6 @@ namespace TicTacToe.UI.Controls
             btnReset.Visibility = Visibility.Visible;//Allow the players to start a new game
         }
 
-        public void ChangeTheme(Theme theme)
-        {
-            board.ChangeTheme(theme);
-        }
-
         /// <summary>
         /// Start a new game
         /// </summary>

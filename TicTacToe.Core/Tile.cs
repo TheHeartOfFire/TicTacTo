@@ -36,6 +36,7 @@ public class Tile(int index): IEquatable<Tile>
             return false;
         }
 
+        // Only the right side is null
         if (secondTile is null) return false;
 
         return firstTile.Owner == secondTile.Owner;

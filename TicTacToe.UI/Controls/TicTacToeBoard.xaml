@@ -8,5 +8,5 @@
              x:Name="Board"
              d:DesignHeight="512" d:DesignWidth="{Binding ElementName=Board, Path=Height}">
     
-    <Grid x:Name="grdContent"/>
+    <Grid x:Name="grdContent" Width="{Binding ActualHeight, ElementName=grdContent}"/>
 </UserControl>

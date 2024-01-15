@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TicTacToe.UI" xmlns:controls="clr-namespace:TicTacToe.UI.Controls"
         mc:Ignorable="d"
-        Title="Tic Tac Toe" Height="580" Width="512" Foreground="{x:Null}" Background="{DynamicResource Background}" Icon="/Assets/TTTIcon.png">
+        Title="Tic Tac Toe" Height="580" Width="512" Foreground="{x:Null}" Background="{DynamicResource Background}" Icon="/Assets/TTTIcon.png" MinWidth="512" MinHeight="580">
 
-    <Grid x:Name="grdGame">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="18"/>
             <RowDefinition Height="562*"/>
@@ -25,7 +25,14 @@
             <MenuItem Header="T_ools" FontFamily="Comic Sans MS">
                 <MenuItem x:Name="menuCoinToss" Header="Whose first?" Click="menuCoinToss_Click"/>
                 <MenuItem x:Name="menuInstructions" Header="How to Play" Click="menuInstructions_Click" />
-            </MenuItem>
+                <MenuItem x:Name="menuSize" Header="Board _Size">
+                    <MenuItem x:Name="menuSize3" Header="_3" Checked="menuSize3_Checked" IsChecked="True" IsCheckable="True"/>
+                    <MenuItem x:Name="menuSize4" Header="_4" Checked="menuSize4_Checked" IsCheckable="True"/>
+                    <MenuItem x:Name="menuSize5" Header="_5" Checked="menuSize5_Checked" IsCheckable="True"/>
+                    <MenuItem x:Name="menuSize6" Header="_6" Checked="menuSize6_Checked" IsCheckable="True"/>
+                    </MenuItem>
+                </MenuItem>
         </Menu>
+        <Grid x:Name="grdGame" Grid.Row="1"/>
     </Grid>
 </Window>
