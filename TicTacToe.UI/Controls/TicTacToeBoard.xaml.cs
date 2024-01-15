@@ -167,8 +167,8 @@ namespace TicTacToe.UI.Controls
 
                 grdContent.Children.Add(tile);
 
-                Grid.SetRow(tile, i%size);
-                Grid.SetColumn(tile, i/size);
+                Grid.SetRow(tile, i/size);
+                Grid.SetColumn(tile, i%size);
 
                 tiles[i] = tile;
             }

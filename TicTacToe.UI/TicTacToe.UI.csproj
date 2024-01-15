@@ -10,7 +10,7 @@
     <AssemblyName>TicTacToeWPF</AssemblyName>
     <Company></Company>
     <Authors>HeartFire</Authors>
-    <Version>1.3.5</Version>
+    <Version>1.5.0</Version>
     <AssemblyVersion>$(version)</AssemblyVersion>
     <FileVersion>$(version)</FileVersion>
     <PackageIcon>TTTIcon.png</PackageIcon>
