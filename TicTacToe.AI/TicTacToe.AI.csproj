@@ -9,4 +9,8 @@
     <FileVersion>$(Version)</FileVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TicTacToe.Core\TicTacToe.Core.csproj" />
+  </ItemGroup>
+
 </Project>
