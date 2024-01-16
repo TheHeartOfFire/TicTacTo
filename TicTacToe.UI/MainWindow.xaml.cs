@@ -52,7 +52,7 @@ public partial class MainWindow : Window
         {
             var updateInfo = await manager.CheckForUpdate();
 
-            if (updateInfo is null)
+            if (!updateInfo.ReleasesToApply.Any())
             {
                 Title = "TicTacToe";
                 return;
