@@ -24,7 +24,6 @@
             </MenuItem>
             <MenuItem Header="T_ools" FontFamily="Comic Sans MS">
                 <MenuItem x:Name="menuCoinToss" Header="Whose first?" Click="menuCoinToss_Click"/>
-                <MenuItem x:Name="menuInstructions" Header="How to Play" Click="menuInstructions_Click" />
                 <MenuItem x:Name="menuSize" Header="Board _Size">
                     <MenuItem x:Name="menuSize3" Header="_3" Checked="menuSize3_Checked" IsChecked="True" IsCheckable="True"/>
                     <MenuItem x:Name="menuSize4" Header="_4" Checked="menuSize4_Checked" IsCheckable="True"/>
@@ -32,6 +31,10 @@
                     <MenuItem x:Name="menuSize6" Header="_6" Checked="menuSize6_Checked" IsCheckable="True"/>
                     </MenuItem>
                 </MenuItem>
+            <MenuItem x:Name="menuHelp" Header="_Help">
+                <MenuItem x:Name="menuInstructions" Header="How to Play" Click="menuInstructions_Click" />
+                <MenuItem x:Name="menuAbout" Header="_About" Click="menuAbout_Click"/>
+            </MenuItem>
         </Menu>
         <Grid x:Name="grdGame" Grid.Row="1"/>
     </Grid>

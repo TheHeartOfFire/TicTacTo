@@ -24,7 +24,6 @@ public partial class MainWindow : Window
         InitializeComponent();
         
         CheckForUpdates().ConfigureAwait(false);
-        AddVersionNumber();
 
         var game = new TicTacToeDisplay();
         grdGame.Children.Add(game);
@@ -47,15 +46,31 @@ public partial class MainWindow : Window
     {
         using var manager = await UpdateManager.GitHubUpdateManager(repoUrl);
 
+        Title = "TicTacToe - (Checking for updates)";
+
+        try
+        {
+            var updateInfo = await manager.CheckForUpdate();
+
+            if (updateInfo != null)
+            {
+                Title = "TicTacToe";
+                return;
+            }
+
+            Title = "TicTacToe - (Updates found! Downloading...)";
+
             await manager.UpdateApp();
+
+            Title = "TicTacToe - (Restart to install update)";
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+        }
+
     } 
 
-    private void AddVersionNumber()
-    {
-        var assembly = Assembly.GetExecutingAssembly();
-        var versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-        Title = Title + " " + versionInfo.FileVersion;
-    }
 
     private void menuSize3_Checked(object sender, RoutedEventArgs e) => ChangeBoardSize(menuSize3);
 
@@ -76,5 +91,10 @@ public partial class MainWindow : Window
         grdGame.Children.Clear();
         var game = new TicTacToeDisplay(size);
         grdGame.Children.Add(game);
+    }
+
+    private void menuAbout_Click(object sender, RoutedEventArgs e)
+    {
+        new About().Show();
     }
 }
