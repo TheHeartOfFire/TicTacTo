@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TicTacToe.AI;
 using TicTacToe.Core;
 using TicTacToe.UI.EventArgs;
 using static System.Net.Mime.MediaTypeNames;
@@ -33,14 +34,23 @@ namespace TicTacToe.UI.Controls
         protected virtual void OnGameOver(GameOverEventArgs e) => GameEnded?.Invoke(this, e);
 
         public delegate void Notify();
-        public event Notify StalemateImminent;
+        public event Notify? StalemateImminent;
         protected virtual void OnStalemateImminent() => StalemateImminent?.Invoke();
+        public event Notify? PlayerTurnOver;
+        protected virtual void OnPlayerTurnOver()=>PlayerTurnOver?.Invoke();
 
-
+        public TileOwner Turn 
+        { 
+            get
+            {
+                return player1 ? TileOwner.Player1 : TileOwner.Player2;
+            } 
+        }
         private Board game = new();
         private bool player1 = true;
         private readonly TicTacToeTile[] tiles;
         private readonly int size = 3;
+        public int Size => size;
         public TicTacToeBoard(int size)
         {
             this.size = size;
@@ -50,13 +60,35 @@ namespace TicTacToe.UI.Controls
             GenerateDividers();
             tiles = GenerateTiles();
             ActiveTheme.ThemeChanged += ActiveTheme_ThemeChanged;
+
+            if (BotManager.Instance.Bot is not null)
+                BotManager.Instance.Bot.TurnOver += Bot_TurnOver;
+
+            BotManager.Instance.BotChanged += Instance_BotChanged;
+        }
+
+        private void Instance_BotChanged()
+        {
+            if (BotManager.Instance.Bot is not null)
+            {
+                BotManager.Instance.Bot.TurnOver -= Bot_TurnOver;
+                BotManager.Instance.Bot.TurnOver += Bot_TurnOver;
+            }
+        }
+
+        private void Bot_TurnOver(object sender, AI.EventArgs.TurnOverEventArgs e)
+        {
+            var tile = tiles[e.TurnTaken.Index];
+            tile.UpdateImage((ImageSource)ActiveTheme.ResDict[e.TurnTaken.Owner is TileOwner.Player1 ? "Player1" : "Player2"]);
+            tile.btnControl.IsEnabled = false;
+            UpdatePlayer();
         }
 
         private void ActiveTheme_ThemeChanged(object? sender, System.EventArgs e)
         {
-            if (sender is null) return;
+            if (sender is not ThemeManager manager) return;
 
-            (sender as ThemeManager).ThemeChanged -= ActiveTheme_ThemeChanged;
+            manager.ThemeChanged -= ActiveTheme_ThemeChanged;
             ActiveTheme.ThemeChanged += ActiveTheme_ThemeChanged;
             ChangeTheme();
         } 
@@ -119,10 +151,10 @@ namespace TicTacToe.UI.Controls
         /// <param name="img"></param>
         /// <param name="btn"></param>
         /// <param name="pos"></param>
-        private void TakeTurn(TicTacToeTile tile, int pos)
+        private void TakeTurn(TicTacToeTile tile)
         {
 
-            game.TakeTurn(player1 ? TileOwner.Player1 : TileOwner.Player2, pos);//process the turn
+            game.TakeTurn(player1 ? TileOwner.Player1 : TileOwner.Player2, tile.Index);//process the turn
             tile.UpdateImage( player1 ? (ImageSource)ActiveTheme.ResDict["Player1"] : (ImageSource)ActiveTheme.ResDict["Player2"]);//set the tile's image to the icon for the current player
 
             tile.btnControl.IsEnabled = false;//disable the button so that this tile can't be chosen again this game
@@ -130,6 +162,11 @@ namespace TicTacToe.UI.Controls
             GameOver();//Check for a win condition
             if(game.IsImminentStalemate) 
                 OnStalemateImminent();
+
+            OnPlayerTurnOver();
+
+            if (BotManager.Instance.Bot is not null)
+                BotManager.Instance.TakeTurn(game, game.Positions[tile.Index]);
         }
 
 

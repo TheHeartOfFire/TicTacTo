@@ -1,11 +1,14 @@
 ﻿using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
+using System.Security.Policy;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Squirrel;
+using TicTacToe.AI;
+using TicTacToe.AI.Interfaces;
 using TicTacToe.Core;
 using TicTacToe.UI.Controls;
 using static TicTacToe.Core.Tile;
@@ -93,8 +96,25 @@ public partial class MainWindow : Window
         grdGame.Children.Add(game);
     }
 
-    private void menuAbout_Click(object sender, RoutedEventArgs e)
+    private void menuAbout_Click(object sender, RoutedEventArgs e) => new About().Show();
+
+    private void menuNoBot_Checked(object sender, RoutedEventArgs e) => SetBot(menuNoBot, null);
+
+    private void menuBadBot_Checked(object sender, RoutedEventArgs e) => SetBot(menuBadBot, new BadBot(TileOwner.Player2));
+
+    private void SetBot(MenuItem selectedItem, ITicTacToeBot? bot)
     {
-        new About().Show();
+        if (grdGame is null) return;//omit call from initializing menuNoBot being defaulted to isChecked = true;
+
+        foreach (MenuItem item in menuBots.Items)
+            if(!item.Name.Equals(selectedItem.Name)) 
+                item.IsChecked = false;
+
+        BotManager.Instance.Bot = bot;
+
+        var oldGame = grdGame.Children[0] as TicTacToeDisplay;
+        var game = new TicTacToeDisplay(oldGame is not null ? oldGame.board.Size : 3);
+        grdGame.Children.Clear();
+        grdGame.Children.Add(game);
     }
 }

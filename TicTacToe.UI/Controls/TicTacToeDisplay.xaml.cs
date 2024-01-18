@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TicTacToe.AI;
 using TicTacToe.Core;
 using TicTacToe.UI.EventArgs;
 using static TicTacToe.UI.ThemeManager;
@@ -23,7 +24,7 @@ namespace TicTacToe.UI.Controls
     /// </summary>
     public partial class TicTacToeDisplay : UserControl
     {
-        private TicTacToeBoard board;
+        public readonly TicTacToeBoard board;
 
         public TicTacToeDisplay(int size)
         {
@@ -51,15 +52,55 @@ namespace TicTacToe.UI.Controls
             board.VerticalAlignment = VerticalAlignment.Stretch;
             board.HorizontalAlignment = HorizontalAlignment.Stretch;
             board.GameEnded += TicTacToeBoard_GameEnded;
+            board.PlayerTurnOver += Board_PlayerTurnOver;
+
+            BotManager.Instance.BotChanged += Instance_BotChanged;
+            if(BotManager.Instance.Bot is not null)
+                BotManager.Instance.Bot.TurnOver += Bot_TurnOver;
         }
 
+        private void Board_PlayerTurnOver()
+        {
+            if (BotManager.Instance.Bot is not null)
+                lblAlert.Content = "Opponent's turn!";
+        }
+
+        private void Bot_TurnOver(object sender, AI.EventArgs.TurnOverEventArgs e)
+        {
+            lblAlert.Content = "Your turn!";
+        }
+
+        private void Instance_BotChanged()
+        {
+            lblAlert.Content = string.Empty;
+            if(BotManager.Instance.Bot is not null)
+            {
+                BotManager.Instance.Bot.TurnOver -= Bot_TurnOver;
+                BotManager.Instance.Bot.TurnOver += Bot_TurnOver;
+
+                lblAlert.Content = "Your turn!";
+                if (    (board.Turn is Tile.TileOwner.Player1 && BotManager.Instance.Bot.Order is Tile.TileOwner.Player1)
+                     || (board.Turn is Tile.TileOwner.Player2 && BotManager.Instance.Bot.Order is Tile.TileOwner.Player2))
+                    lblAlert.Content = "Opponent's turn!";
+            }
+        }
 
         private void TicTacToeBoard_GameEnded(object sender, GameOverEventArgs e)
         {
+            
+
             lblAlert.Content = "Winner!";
 
             if (e.Result.Winner is WinResult.WinType.Stalemate)//If the game was decisive, Tell the player there was a winner, otherwise, tell them it was a stalemate.
                 lblAlert.Content = "Stalemate!";
+
+            if (BotManager.Instance.Bot is not null)
+            {
+                lblAlert.Content = "You Win!";
+                if (    (e.Result.Winner is WinResult.WinType.Player1 && BotManager.Instance.Bot.Order is Tile.TileOwner.Player1) 
+                    ||  (e.Result.Winner is WinResult.WinType.Player2 && BotManager.Instance.Bot.Order is Tile.TileOwner.Player2))
+                    lblAlert.Content = "Opponent wins!";
+            }
 
             btnReset.Visibility = Visibility.Visible;//Allow the players to start a new game
         }
@@ -78,5 +119,7 @@ namespace TicTacToe.UI.Controls
             board.Reset();
             
         }
+
+
     }
 }
