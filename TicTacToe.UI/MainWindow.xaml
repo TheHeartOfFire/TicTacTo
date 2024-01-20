@@ -23,6 +23,11 @@
                 <MenuItem x:Name="menuCardTheme" Header="_Poker Playground" Click="menuCardTheme_Click"/>
             </MenuItem>
             <MenuItem x:Name="menuBots" Header="_Bots">
+                <MenuItem x:Name="menuBotOrder" Header="Order">
+                    <MenuItem x:Name="menuBotOrderFirst" Header="Bot goes first." IsCheckable="True" Checked="menuBotOrderFirst_Checked"/>
+                    <MenuItem x:Name="menuBotOrderSecond" Header="Bot goes second." IsCheckable="True"  IsChecked="True" Checked="menuBotOrderSecond_Checked"/>
+                </MenuItem>
+                <RibbonSplitMenuItem/>
                 <MenuItem x:Name="menuNoBot" Header="_None" IsChecked="True" IsCheckable="True" Checked="menuNoBot_Checked"/>
                 <MenuItem x:Name="menuBadBot" Header="_Easy(Random)" Checked="menuBadBot_Checked" IsCheckable="True"/>
             </MenuItem>

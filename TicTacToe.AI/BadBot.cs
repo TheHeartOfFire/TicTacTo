@@ -6,13 +6,26 @@ using System.Threading.Tasks;
 using TicTacToe.AI.EventArgs;
 using TicTacToe.AI.Interfaces;
 using TicTacToe.Core;
+using static TicTacToe.AI.BotManager;
 using static TicTacToe.Core.Tile;
 
 namespace TicTacToe.AI;
 public class BadBot : ITicTacToeBot
 {
-    public event ITicTacToeBot.TurnOverEventHandler? TurnOver;
-    protected virtual void OnTurnOver(TurnOverEventArgs e) => TurnOver?.Invoke(this, e);
+    private event TurnOverEventHandler? turnOver;
+    public event TurnOverEventHandler? TurnOver
+    {
+        add
+        {
+            turnOver -= value;
+            turnOver += value;
+        }
+        remove
+        {
+            turnOver -= value;
+        }
+    }
+    protected virtual void OnTurnOver(TurnOverEventArgs e) => turnOver?.Invoke(this, e);
 
     public Board TakeTurn(Board game, Tile? tilePlayed) => PickTile(game);
     private TileOwner _order;
@@ -42,12 +55,17 @@ public class BadBot : ITicTacToeBot
         foreach(var tile in game.Positions)
             if(tile.Owner is TileOwner.Unclaimed) unclaimedTiles.Add(tile);
 
+        if (unclaimedTiles.Count <= 0) return game;
+
         var rand = new Random();
         var index = rand.Next(0, unclaimedTiles.Count);
         var selectedTile = unclaimedTiles[index];
         game.TakeTurn(Order, selectedTile.Index);
+
         OnTurnOver(new TurnOverEventArgs(selectedTile));
         return game;
 
     }
+
+    public ITicTacToeBot New(TileOwner order) => new BadBot(order);
 }

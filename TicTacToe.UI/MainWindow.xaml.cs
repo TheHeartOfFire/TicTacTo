@@ -91,16 +91,16 @@ public partial class MainWindow : Window
             if (!item.Name.Equals(selectedItem.Name))
                 item.IsChecked = false;
 
-        grdGame.Children.Clear();
-        var game = new TicTacToeDisplay(size);
-        grdGame.Children.Add(game);
+
+        var game = grdGame.Children[0] as TicTacToeDisplay;
+        game?.Reset(size);
     }
 
     private void menuAbout_Click(object sender, RoutedEventArgs e) => new About().Show();
 
     private void menuNoBot_Checked(object sender, RoutedEventArgs e) => SetBot(menuNoBot, null);
 
-    private void menuBadBot_Checked(object sender, RoutedEventArgs e) => SetBot(menuBadBot, new BadBot(TileOwner.Player2));
+    private void menuBadBot_Checked(object sender, RoutedEventArgs e) => SetBot(menuBadBot, new BadBot(menuBotOrderSecond.IsChecked ? TileOwner.Player2 : TileOwner.Player1));
 
     private void SetBot(MenuItem selectedItem, ITicTacToeBot? bot)
     {
@@ -109,12 +109,24 @@ public partial class MainWindow : Window
         foreach (MenuItem item in menuBots.Items)
             if(!item.Name.Equals(selectedItem.Name)) 
                 item.IsChecked = false;
-
+        
         BotManager.Instance.Bot = bot;
 
-        var oldGame = grdGame.Children[0] as TicTacToeDisplay;
-        var game = new TicTacToeDisplay(oldGame is not null ? oldGame.board.Size : 3);
-        grdGame.Children.Clear();
-        grdGame.Children.Add(game);
     }
+
+    private void SetBotOrder(MenuItem selectedItem, TileOwner order)
+    {
+        if (grdGame is null) return;//omit call from initializing menuBotOrderSecond being defaulted to isChecked = true;
+        foreach (MenuItem item in menuBotOrder.Items)
+            if (!item.Name.Equals(selectedItem.Name))
+                item.IsChecked = false;
+        if (BotManager.Instance.Bot is null) return; //don't bother trying to set the order for a bot that doesn't exist
+
+
+        BotManager.Instance.Bot = BotManager.Instance.Bot?.New(order);
+    }
+
+    private void menuBotOrderFirst_Checked(object sender, RoutedEventArgs e) => SetBotOrder(menuBotOrderFirst, TileOwner.Player1);
+
+    private void menuBotOrderSecond_Checked(object sender, RoutedEventArgs e) => SetBotOrder(menuBotOrderSecond, TileOwner.Player2);
 }

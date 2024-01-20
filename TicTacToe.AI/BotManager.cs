@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TicTacToe.AI.EventArgs;
 using TicTacToe.AI.Interfaces;
 using TicTacToe.Core;
 
 namespace TicTacToe.AI;
 public class BotManager
 {
+
+    public delegate void TurnOverEventHandler(object sender, TurnOverEventArgs e);
     private static BotManager? _instance;
     public static BotManager Instance
     {
@@ -27,7 +30,7 @@ public class BotManager
     public Board TakeTurn(Board game, Tile? turnTaken)
     {
         if (_bot is null) throw new InvalidOperationException("Bot cannot be null!");
-
         return _bot.TakeTurn(game, turnTaken);
+    
     }
 }
