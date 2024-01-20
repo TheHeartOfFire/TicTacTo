@@ -1,11 +1,14 @@
 ﻿using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
+using System.Security.Policy;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Squirrel;
+using TicTacToe.AI;
+using TicTacToe.AI.Interfaces;
 using TicTacToe.Core;
 using TicTacToe.UI.Controls;
 using static TicTacToe.Core.Tile;
@@ -24,7 +27,6 @@ public partial class MainWindow : Window
         InitializeComponent();
         
         CheckForUpdates().ConfigureAwait(false);
-        AddVersionNumber();
 
         var game = new TicTacToeDisplay();
         grdGame.Children.Add(game);
@@ -47,15 +49,31 @@ public partial class MainWindow : Window
     {
         using var manager = await UpdateManager.GitHubUpdateManager(repoUrl);
 
+        Title = "TicTacToe - (Checking for updates)";
+
+        try
+        {
+            var updateInfo = await manager.CheckForUpdate();
+
+            if (!updateInfo.ReleasesToApply.Any())
+            {
+                Title = "TicTacToe";
+                return;
+            }
+
+            Title = "TicTacToe - (Updates found! Downloading...)";
+
             await manager.UpdateApp();
+
+            Title = "TicTacToe - (Restart to install update)";
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+        }
+
     } 
 
-    private void AddVersionNumber()
-    {
-        var assembly = Assembly.GetExecutingAssembly();
-        var versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-        Title = Title + " " + versionInfo.FileVersion;
-    }
 
     private void menuSize3_Checked(object sender, RoutedEventArgs e) => ChangeBoardSize(menuSize3);
 
@@ -73,8 +91,42 @@ public partial class MainWindow : Window
             if (!item.Name.Equals(selectedItem.Name))
                 item.IsChecked = false;
 
-        grdGame.Children.Clear();
-        var game = new TicTacToeDisplay(size);
-        grdGame.Children.Add(game);
+
+        var game = grdGame.Children[0] as TicTacToeDisplay;
+        game?.Reset(size);
     }
+
+    private void menuAbout_Click(object sender, RoutedEventArgs e) => new About().Show();
+
+    private void menuNoBot_Checked(object sender, RoutedEventArgs e) => SetBot(menuNoBot, null);
+
+    private void menuBadBot_Checked(object sender, RoutedEventArgs e) => SetBot(menuBadBot, new BadBot(menuBotOrderSecond.IsChecked ? TileOwner.Player2 : TileOwner.Player1));
+
+    private void SetBot(MenuItem selectedItem, ITicTacToeBot? bot)
+    {
+        if (grdGame is null) return;//omit call from initializing menuNoBot being defaulted to isChecked = true;
+
+        foreach (MenuItem item in menuBots.Items)
+            if(!item.Name.Equals(selectedItem.Name)) 
+                item.IsChecked = false;
+        
+        BotManager.Instance.Bot = bot;
+
+    }
+
+    private void SetBotOrder(MenuItem selectedItem, TileOwner order)
+    {
+        if (grdGame is null) return;//omit call from initializing menuBotOrderSecond being defaulted to isChecked = true;
+        foreach (MenuItem item in menuBotOrder.Items)
+            if (!item.Name.Equals(selectedItem.Name))
+                item.IsChecked = false;
+        if (BotManager.Instance.Bot is null) return; //don't bother trying to set the order for a bot that doesn't exist
+
+
+        BotManager.Instance.Bot = BotManager.Instance.Bot?.New(order);
+    }
+
+    private void menuBotOrderFirst_Checked(object sender, RoutedEventArgs e) => SetBotOrder(menuBotOrderFirst, TileOwner.Player1);
+
+    private void menuBotOrderSecond_Checked(object sender, RoutedEventArgs e) => SetBotOrder(menuBotOrderSecond, TileOwner.Player2);
 }

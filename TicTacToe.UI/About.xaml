@@ -1,0 +1,21 @@
+﻿<Window x:Class="TicTacToe.UI.About"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TicTacToe.UI"
+        mc:Ignorable="d"
+        Title="About" Height="249" Width="231" FontFamily="Comic Sans MS" ResizeMode="NoResize">
+    <Grid>
+        <Label Content="Tic Tac Toe" Margin="10,10,10,10" VerticalAlignment="Top" FontSize="24" FontWeight="Bold"/>
+        <Label Content="TicTacToe.Core" HorizontalAlignment="Left" Margin="10,58,0,0" VerticalAlignment="Top"/>
+        <Label Content="TicTacToe.AI" HorizontalAlignment="Left" Margin="10,90,0,0" VerticalAlignment="Top"/>
+        <Label Content="TicTacToe.UI" HorizontalAlignment="Left" Margin="10,122,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblCoreVersion" Content="" HorizontalAlignment="Left" Margin="116,58,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblAIVersion" Content="" HorizontalAlignment="Left" Margin="116,90,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblUIVersion" Content="" HorizontalAlignment="Left" Margin="116,122,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Center" FontSize="18" Click="btnClose_Click" VerticalAlignment="Bottom" Margin="0,0,0,10"/>
+
+
+    </Grid>
+</Window>
