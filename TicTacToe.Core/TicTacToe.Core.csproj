@@ -5,7 +5,7 @@
     <AssemblyTitle>TicTacToe.Core</AssemblyTitle>
     <Product>TicTacToe.Core</Product>
     <Copyright>Copyright ©  2023</Copyright>
-    <Version>2.0.0</Version>
+    <Version>2.0.1</Version>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <FileVersion>$(Version)</FileVersion>
   </PropertyGroup>

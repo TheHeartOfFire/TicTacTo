@@ -1,32 +1,11 @@
-﻿using System;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
-using TicTacToe.UI.EventArgs;
 
 namespace TicTacToe.UI
 {
-    public class ThemeManager
+    internal class ThemeManager
     {
-        public event EventHandler? ThemeChanged;
-        protected virtual void OnThemeChanged() => ThemeChanged?.Invoke(this, System.EventArgs.Empty);
-
-        private static readonly string themePath = "TicTacToeWPF;component/Assets/Themes/";
-        private static readonly ThemeManager[] Themes = [
-        new ThemeManager(Theme.BUG),
-            new ThemeManager(Theme.CANDY),
-            new ThemeManager(Theme.TRADITIONAL),
-            new ThemeManager(Theme.CARD),
-            new ThemeManager(Theme.SEA)
-        ];
-        public static ThemeManager ActiveTheme { get; private set; } = Themes[0];
-        public Cursor Player1Cursor { get; }
-        public Cursor Player2Cursor { get; }
-        public ResourceDictionary ResDict { get; }
-        public Theme CurrentTheme { get; }
-
-        public enum Theme
+        internal enum Theme
         {
             BUG,
             CANDY,
@@ -34,19 +13,25 @@ namespace TicTacToe.UI
             CARD,
             SEA
         }
+        internal event EventHandler? ThemeChanged;
+        internal Cursor Player1Cursor { get; }
+        internal Cursor Player2Cursor { get; }
+        internal ResourceDictionary ResDict { get; }
+        internal Theme CurrentTheme { get; }
+        protected virtual void OnThemeChanged() => ThemeChanged?.Invoke(this, System.EventArgs.Empty);
 
-        public ThemeManager(Theme theme)
-        {
-            CurrentTheme = theme;
-            ResDict = new ResourceDictionary()
-            {
-                Source = new Uri(themePath + theme + "/Theme.xaml", UriKind.Relative)
-            };
-            Player1Cursor = new Cursor(Application.GetResourceStream(new Uri(themePath + theme + "/Player1.cur", UriKind.Relative)).Stream);
-            Player2Cursor = new Cursor(Application.GetResourceStream(new Uri(themePath + theme + "/Player2.cur", UriKind.Relative)).Stream);
-        }
+        private static readonly string themePath = "TicTacToeWPF;component/Assets/Themes/";
+        private static readonly ThemeManager[] Themes =
+            [
+                new ThemeManager(Theme.BUG),
+                new ThemeManager(Theme.CANDY),
+                new ThemeManager(Theme.TRADITIONAL),
+                new ThemeManager(Theme.CARD),
+                new ThemeManager(Theme.SEA)
+        ];
 
-        public static ThemeManager GetTheme(Theme theme)
+        internal static ThemeManager ActiveTheme { get; private set; } = Themes[0];
+        internal static ThemeManager GetTheme(Theme theme)
         {
             return theme switch
             {
@@ -58,9 +43,8 @@ namespace TicTacToe.UI
                 _ => Themes[0],
             };
         }
-
-        public static void SetTheme(Theme theme) => SetTheme(GetTheme(theme));
-        public static void SetTheme(ThemeManager theme)
+        internal static void SetTheme(Theme theme) => SetTheme(GetTheme(theme));
+        internal static void SetTheme(ThemeManager theme)
         {
             var oldTheme = ActiveTheme;
 
@@ -69,6 +53,16 @@ namespace TicTacToe.UI
             Application.Current.Resources.MergedDictionaries.Add(theme.ResDict);//Change the active resource dictionary
 
             oldTheme.OnThemeChanged();
+        }
+        internal ThemeManager(Theme theme)
+        {
+            CurrentTheme = theme;
+            ResDict = new ResourceDictionary()
+            {
+                Source = new Uri(themePath + theme + "/Theme.xaml", UriKind.Relative)
+            };
+            Player1Cursor = new Cursor(Application.GetResourceStream(new Uri(themePath + theme + "/Player1.cur", UriKind.Relative)).Stream);
+            Player2Cursor = new Cursor(Application.GetResourceStream(new Uri(themePath + theme + "/Player2.cur", UriKind.Relative)).Stream);
         }
     }
 }

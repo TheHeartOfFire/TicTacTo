@@ -1,22 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using TicTacToe.AI;
 using TicTacToe.Core;
 using TicTacToe.UI.EventArgs;
-using static System.Net.Mime.MediaTypeNames;
 using static TicTacToe.Core.Tile;
 using static TicTacToe.UI.ThemeManager;
 using Image = System.Windows.Controls.Image;
@@ -30,14 +19,13 @@ namespace TicTacToe.UI.Controls
     {
 
         public delegate void GameOverEventHandler(object sender, GameOverEventArgs e);
+        public delegate void Notify();
 
         public event GameOverEventHandler? GameEnded;
-        protected virtual void OnGameOver(GameOverEventArgs e) => GameEnded?.Invoke(this, e);
-
-        public delegate void Notify();
         public event Notify? StalemateImminent;
-        protected virtual void OnStalemateImminent() => StalemateImminent?.Invoke();
         public event Notify? PlayerTurnOver;
+        protected virtual void OnGameOver(GameOverEventArgs e) => GameEnded?.Invoke(this, e);
+        protected virtual void OnStalemateImminent() => StalemateImminent?.Invoke();
         protected virtual void OnPlayerTurnOver()=>PlayerTurnOver?.Invoke();
 
         public TileOwner Turn 
@@ -47,21 +35,49 @@ namespace TicTacToe.UI.Controls
                 return player1 ? TileOwner.Player1 : TileOwner.Player2;
             } 
         }
+        public int Size => size;
         private Board game = new();
         private bool player1 = true;
         private TicTacToeTile[]? tiles;
         private int size = 3;
-        public int Size => size;
         public TicTacToeBoard(int size)
         {
             Reset(size);
             ActiveTheme.ThemeChanged += ActiveTheme_ThemeChanged;
-
             BotManager.Instance.BotChanged += Instance_BotChanged;
-
-
         }
 
+        public TicTacToeBoard()
+        {
+            Reset(3);
+            ActiveTheme.ThemeChanged += ActiveTheme_ThemeChanged;
+            BotManager.Instance.BotChanged += Instance_BotChanged;
+        }
+        public void Reset(int? size)
+        {
+            this.size = size??this.size;
+
+            game = new(this.size);//Create a new game board to play on
+
+            grdContent?.Children.Clear();
+            InitializeComponent();
+            DefineRowsAndCols();
+            GenerateDividers();
+            tiles = GenerateTiles();
+
+            Cursor = ActiveTheme.Player1Cursor;//reset the cursor
+
+            player1 = true;
+            if (BotManager.Instance.Bot is not null && BotManager.Instance.Bot.Order is TileOwner.Player1)
+                BotManager.Instance.Bot.TakeTurn(game, null);
+        }
+        public void Dispose()
+        {
+            ActiveTheme.ThemeChanged -= ActiveTheme_ThemeChanged;
+
+            if (BotManager.Instance.Bot is not null)
+                BotManager.Instance.Bot.TurnOver -= Bot_TurnOver;
+        }
 
         private void Bot_TurnOver(object sender, AI.EventArgs.TurnOverEventArgs e)
         {
@@ -82,28 +98,14 @@ namespace TicTacToe.UI.Controls
             ChangeTheme();
         } 
 
-        public TicTacToeBoard()
-        {
-            Reset(3);
-
-            ActiveTheme.ThemeChanged += ActiveTheme_ThemeChanged;
-
-            BotManager.Instance.BotChanged += Instance_BotChanged;
-
-
-        }
 
         private void Instance_BotChanged()
         {
-
             if (BotManager.Instance.Bot is null) return;
 
             BotManager.Instance.Bot.TurnOver += Bot_TurnOver;
 
             Reset(null);
-
-            if (BotManager.Instance.Bot.Order is TileOwner.Player1)
-                BotManager.Instance.Bot.TakeTurn(game, null);
         }
 
         /// <summary>
@@ -111,7 +113,7 @@ namespace TicTacToe.UI.Controls
         /// </summary>
         private void GameOver()
         {
-            var winner = game.CheckWin();//Get the current WinStatus of the game
+            var winner = game.CheckForWin();//Get the current WinStatus of the game
             if (winner.Winner is WinResult.WinType.None) return;//If the game is still in progress, do nothing
 
             Cursor = Cursors.Arrow;//Change the cursor back to the normal one as no players are taking a turn
@@ -157,7 +159,6 @@ namespace TicTacToe.UI.Controls
         /// <param name="pos"></param>
         private void TakeTurn(TicTacToeTile tile)
         {
-
             game.TakeTurn(player1 ? TileOwner.Player1 : TileOwner.Player2, tile.Index);//process the turn
             tile.UpdateImage( player1 ? (ImageSource)ActiveTheme.ResDict["Player1"] : (ImageSource)ActiveTheme.ResDict["Player2"]);//set the tile's image to the icon for the current player
 
@@ -173,39 +174,21 @@ namespace TicTacToe.UI.Controls
                 BotManager.Instance.TakeTurn(game, game.Positions[tile.Index]);
         }
 
-
         private void ChangeTheme()
         {
+            if (tiles is null || tiles.Length <= 0 ) return;
+
             foreach(var tile in tiles)
             {
                 if (game.Positions[tile.Index].Owner is not TileOwner.Unclaimed)
                     tile.imgDisplay.Source = (ImageSource)ActiveTheme.ResDict[game.Positions[tile.Index].Owner.ToString()];
 
-                if (game.CheckWin().Winner is WinResult.WinType.Stalemate)
+                if (game.CheckForWin().Winner is WinResult.WinType.Stalemate)
                     tile.imgDisplay.Source = (ImageSource)ActiveTheme.ResDict["Stalemate"];
             }
-
-
             Cursor = player1 ? ActiveTheme.Player1Cursor : ActiveTheme.Player2Cursor;//update cursor
         }
         
-        public void Reset(int? size)
-        {
-
-            this.size = size??this.size;
-
-            game = new(this.size);//Create a new game board to play on
-
-            grdContent?.Children.Clear();
-            InitializeComponent();
-            DefineRowsAndCols();
-            GenerateDividers();
-            tiles = GenerateTiles();
-
-            Cursor = ActiveTheme.Player1Cursor;//reset the cursor
-
-            player1 = true;
-        }
 
         private TicTacToeTile[] GenerateTiles()
         {
@@ -267,6 +250,7 @@ namespace TicTacToe.UI.Controls
                 Grid.SetRow(horizontal, i);
                 Grid.SetColumnSpan(horizontal, size);
                 Grid.SetRowSpan(horizontal, 2);
+
                 Grid.SetColumn(vertical, i);
                 Grid.SetRowSpan(vertical, size);
                 Grid.SetColumnSpan(vertical, 2);
@@ -274,14 +258,6 @@ namespace TicTacToe.UI.Controls
                 grdContent.Children.Add(vertical);
                 grdContent.Children.Add(horizontal);
             }
-        }
-
-        public void Dispose()
-        {
-            ActiveTheme.ThemeChanged -= ActiveTheme_ThemeChanged;
-
-            if (BotManager.Instance.Bot is not null)
-                BotManager.Instance.Bot.TurnOver -= Bot_TurnOver;
         }
     }
 }
