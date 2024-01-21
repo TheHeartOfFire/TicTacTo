@@ -1,15 +1,9 @@
 ﻿using System.Diagnostics;
-using System.Drawing;
-using System.Reflection;
-using System.Security.Policy;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
 using Squirrel;
 using TicTacToe.AI;
 using TicTacToe.AI.Interfaces;
-using TicTacToe.Core;
 using TicTacToe.UI.Controls;
 using static TicTacToe.Core.Tile;
 using static TicTacToe.UI.ThemeManager;
@@ -113,6 +107,9 @@ public partial class MainWindow : Window
         BotManager.Instance.Bot = bot;
 
     }
+    private void menuBotOrderFirst_Checked(object sender, RoutedEventArgs e) => SetBotOrder(menuBotOrderFirst, TileOwner.Player1);
+
+    private void menuBotOrderSecond_Checked(object sender, RoutedEventArgs e) => SetBotOrder(menuBotOrderSecond, TileOwner.Player2);
 
     private void SetBotOrder(MenuItem selectedItem, TileOwner order)
     {
@@ -125,8 +122,4 @@ public partial class MainWindow : Window
 
         BotManager.Instance.Bot = BotManager.Instance.Bot?.New(order);
     }
-
-    private void menuBotOrderFirst_Checked(object sender, RoutedEventArgs e) => SetBotOrder(menuBotOrderFirst, TileOwner.Player1);
-
-    private void menuBotOrderSecond_Checked(object sender, RoutedEventArgs e) => SetBotOrder(menuBotOrderSecond, TileOwner.Player2);
 }

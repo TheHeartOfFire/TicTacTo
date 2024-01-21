@@ -77,7 +77,7 @@ namespace TicTacToe.Testing
                 if (owner[i] is not TileOwner.Unclaimed)
                 _sut.TakeTurn(owner[i], i);
             }
-            var actual = _sut.CheckWin();
+            var actual = _sut.CheckForWin();
             Assert.Equal(expected, actual.Winner);
 
         }

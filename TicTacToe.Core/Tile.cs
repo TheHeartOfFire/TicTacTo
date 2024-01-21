@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TicTacToe.Core;
 public class Tile(int index): IEquatable<Tile>
@@ -14,17 +9,16 @@ public class Tile(int index): IEquatable<Tile>
         Player1,
         Player2
     }
-
-    private TileOwner _owner = TileOwner.Unclaimed;
-    private bool _winningTile = false;
-
     public TileOwner Owner { get{ return _owner; } }
     public int Index { get; } = index;
     public bool WinningTile { get { return _winningTile; } }
 
+    private TileOwner _owner = TileOwner.Unclaimed;
+    private bool _winningTile = false;
+
+
     public void Claim(TileOwner owner) => _owner = owner;
     public void MarkAsWinner() => _winningTile = true;
-
 
     public static bool operator ==(Tile firstTile, Tile secondTile)
     {
@@ -44,6 +38,7 @@ public class Tile(int index): IEquatable<Tile>
 
     public static bool operator !=(Tile firstTile, Tile secondTile) => !(firstTile == secondTile);
 
+    //IEquatable stuff
     public override bool Equals(object obj)
     {
         if (ReferenceEquals(this, obj))

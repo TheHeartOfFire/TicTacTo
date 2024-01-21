@@ -1,21 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using TicTacToe.AI;
 using TicTacToe.Core;
 using TicTacToe.UI.EventArgs;
-using static TicTacToe.UI.ThemeManager;
 
 namespace TicTacToe.UI.Controls
 {
@@ -26,12 +13,51 @@ namespace TicTacToe.UI.Controls
     {
         public readonly TicTacToeBoard board;
 
-
         public TicTacToeDisplay(int size)
         {
             InitializeComponent();
-           
             board = new TicTacToeBoard(size);
+            Init();
+        }
+        public TicTacToeDisplay()
+        {
+            InitializeComponent();
+            board = new TicTacToeBoard(3);
+            Init();
+        }
+        public void Reset (int? size)
+        {
+
+            btnReset.Visibility = Visibility.Hidden;//Hide the reset button. This should only be visible at the end of the game.
+
+            lblAlert.Content = "";//This label is only visible at the end of the game.
+
+            if (BotManager.Instance.Bot is not null)
+            {
+
+                lblAlert.Content = "Your turn!";
+                if ((board.Turn is Tile.TileOwner.Player1 && BotManager.Instance.Bot.Order is Tile.TileOwner.Player1)
+                     || (board.Turn is Tile.TileOwner.Player2 && BotManager.Instance.Bot.Order is Tile.TileOwner.Player2))
+                    lblAlert.Content = "Opponent's turn!";
+            }
+            board.Reset(size);
+        }
+
+        public void Dispose()
+        {
+
+            board.GameEnded -= TicTacToeBoard_GameEnded;
+            board.PlayerTurnOver -= Board_PlayerTurnOver;
+            board.StalemateImminent -= Board_StalemateImminent;
+
+            board.Dispose();
+
+            BotManager.Instance.BotChanged -= Instance_BotChanged;
+            if (BotManager.Instance.Bot is not null)
+                BotManager.Instance.Bot.TurnOver -= Bot_TurnOver;
+        }
+        private void Init()
+        {
             grdBoard.Children.Add(board);
             Grid.SetRow(board, 1);
             board.VerticalAlignment = VerticalAlignment.Stretch;
@@ -46,21 +72,6 @@ namespace TicTacToe.UI.Controls
         private void Board_StalemateImminent()
         {
             lblAlert.Content = "Stalemate!";
-        }
-
-        public TicTacToeDisplay()
-        {
-            InitializeComponent();
-            board = new TicTacToeBoard(3);
-            grdBoard.Children.Add(board);
-            Grid.SetRow(board, 1);
-            board.VerticalAlignment = VerticalAlignment.Stretch;
-            board.HorizontalAlignment = HorizontalAlignment.Stretch;
-            board.GameEnded += TicTacToeBoard_GameEnded;
-            board.PlayerTurnOver += Board_PlayerTurnOver;
-            board.StalemateImminent += Board_StalemateImminent;
-
-            BotManager.Instance.BotChanged += Instance_BotChanged;
         }
 
         private void Board_PlayerTurnOver()
@@ -90,8 +101,6 @@ namespace TicTacToe.UI.Controls
 
         private void TicTacToeBoard_GameEnded(object sender, GameOverEventArgs e)
         {
-            
-
             lblAlert.Content = "Winner!";
 
             if (e.Result.Winner is WinResult.WinType.Stalemate)//If the game was decisive, Tell the player there was a winner, otherwise, tell them it was a stalemate.
@@ -108,43 +117,6 @@ namespace TicTacToe.UI.Controls
             btnReset.Visibility = Visibility.Visible;//Allow the players to start a new game
         }
 
-        /// <summary>
-        /// Start a new game
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void btnReset_Click(object sender, RoutedEventArgs e) => Reset(null);
-        public void Reset (int? size)
-        {
-
-            btnReset.Visibility = Visibility.Hidden;//Hide the reset button. This should only be visible at the end of the game.
-
-            lblAlert.Content = "";//This label is only visible at the end of the game.
-
-            if (BotManager.Instance.Bot is not null)
-            {
-
-                lblAlert.Content = "Your turn!";
-                if ((board.Turn is Tile.TileOwner.Player1 && BotManager.Instance.Bot.Order is Tile.TileOwner.Player1)
-                     || (board.Turn is Tile.TileOwner.Player2 && BotManager.Instance.Bot.Order is Tile.TileOwner.Player2))
-                    lblAlert.Content = "Opponent's turn!";
-            }
-            board.Reset(size);
-
-        }
-
-        public void Dispose()
-        {
-
-            board.GameEnded -= TicTacToeBoard_GameEnded;
-            board.PlayerTurnOver -= Board_PlayerTurnOver;
-            board.StalemateImminent -= Board_StalemateImminent;
-
-            board.Dispose();
-
-            BotManager.Instance.BotChanged -= Instance_BotChanged;
-            if (BotManager.Instance.Bot is not null)
-                BotManager.Instance.Bot.TurnOver -= Bot_TurnOver;
-        }
     }
 }
