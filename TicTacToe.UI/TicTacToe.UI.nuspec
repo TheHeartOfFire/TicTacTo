@@ -8,7 +8,6 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>Tic Tac Toe game for resume purposes</description>
-    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
   </metadata>
   <files>
   <file src="bin\release\net8.0-windows\**" target="lib\net45" exclude=".pdb"/>

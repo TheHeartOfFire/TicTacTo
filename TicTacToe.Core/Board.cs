@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using TicTacToe.Core;
 using static TicTacToe.Core.Tile;
-using static TicTacToe.Core.WinResult;
 
 namespace TicTacToe.Core;
 
@@ -13,17 +11,15 @@ public class Board
 {
     /// <summary>
     /// Current state of the game board.
-    /// Read Only
     /// </summary>
-    private readonly Tile[] positions;
-
-    
     public Tile[] Positions => positions;
+    /// <summary>
+    /// True if a stalemate is unavoidable due to the current state of the board
+    /// </summary>
+    public bool IsImminentStalemate { get; set; }
 
-    public bool IsImminentStalemate = false;
-
+    private readonly Tile[] positions;
     private readonly int boardSize;
-
     private Tile lastTilePlayed;
 
     public Board(int size = 3)
@@ -36,8 +32,6 @@ public class Board
         //initialize win conditions
         WinCondition.FindWinConditions(boardSize);
     }
-   
-
 
 
     /// <summary>
@@ -45,7 +39,9 @@ public class Board
     /// </summary>
     /// <param name="player">TileOwner.Player1 or TileOwner.Player2. TileOwner.Unclaimed will throw an error.</param>
     /// <param name="position">Position is the 0-based index of the Positions array.</param>
-    /// <returns>False if the position has already been selected, otherwise true.</returns>
+    /// <returns>False if the position has already been selected, otherwise true</returns>
+    /// <exception cref="ArgumentException">You cannot unclaim a tile. Player must be either TileOwner.Player1 or TileOwner.Player2</exception>
+    /// <exception cref="ArgumentOutOfRangeException">position can only be 0 thru (boardSize * 2) - 1 representing the valid indicies on the board.</exception>
     public bool TakeTurn(TileOwner player, int position)
     {
         if (player is TileOwner.Unclaimed)
@@ -64,7 +60,7 @@ public class Board
     /// Check the board against the list of win conditions and mark any tiles involved in a win as winning tiles.
     /// </summary>
     /// <returns>Returns a WinResult for the current state of the board.</returns>
-    public WinResult CheckWin()
+    public WinResult CheckForWin()
     {
         WinCondition.TrimImpossibleConditions(Positions);
         IsImminentStalemate = !WinCondition.IsWinPossible();

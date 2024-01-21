@@ -12,6 +12,19 @@ public class WinResult(Tile[] board)
         Player2,
         Stalemate
     }
+    //Get the indicies for all winning tiles.
+    public List<int> WinningTileIndicies 
+    { 
+        get
+        {
+            List<int> tiles = [];
+
+            foreach (var tile in board)
+                if (tile.WinningTile)
+                    tiles.Add(tile.Index);
+            return tiles;
+        } 
+    }
 
     public WinType Winner
     {
@@ -27,18 +40,14 @@ public class WinResult(Tile[] board)
             return WinType.Stalemate;
         }
     }
-    //Get the indicies for all winning tiles.
-    public List<int> WinningTileIndicies { get
-        {
-            List<int> tiles = [];
 
-            foreach (var tile in board)
-                if (tile.WinningTile)
-                    tiles.Add(tile.Index);
-            return tiles;
-        } }
-
-    public List<Tile> WinningTiles { get { return board.Where(tile => tile.WinningTile).ToList(); } }
+    public List<Tile> WinningTiles 
+    { 
+        get 
+        { 
+            return board.Where(tile => tile.WinningTile).ToList(); 
+        } 
+    }
 
     private static WinType ConvertTileOwnerToWinType(TileOwner owner) => owner switch
     {
@@ -46,5 +55,4 @@ public class WinResult(Tile[] board)
         TileOwner.Player2 => WinType.Player2,
         _ => WinType.None,
     };
-    
 }
