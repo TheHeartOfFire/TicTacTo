@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using static TicTacToe.Core.Tile;
 
 namespace TicTacToe.UI.Controls
 {
@@ -9,16 +10,16 @@ namespace TicTacToe.UI.Controls
     /// </summary>
     public partial class TicTacToeTile : UserControl
     {
-        public readonly int Index;
+        public readonly Coordinates Coords;
         private readonly Action<TicTacToeTile> takeTurn;
-        public TicTacToeTile(int index, Action<TicTacToeTile> takeTurn)
+        public TicTacToeTile(Coordinates coords, Action<TicTacToeTile> takeTurn)
         {
             InitializeComponent();
-            Index = index;
+            Coords = coords;
             this.takeTurn = takeTurn;
         }
 
-        public void UpdateImage(ImageSource image) => imgDisplay.Source = image;
+        public void UpdateImage(ImageSource? image) => imgDisplay.Source = image;
         private void btnControl_Click(object sender, RoutedEventArgs e) => takeTurn(this);
 
     }

@@ -38,7 +38,7 @@ namespace TicTacToe.UI.Controls
         public int Size => size;
         private Board game = new();
         private bool player1 = true;
-        private TicTacToeTile[]? tiles;
+        private TicTacToeTile[,]? tiles;
         private int size = 3;
         public TicTacToeBoard(int size)
         {
@@ -78,14 +78,30 @@ namespace TicTacToe.UI.Controls
             if (BotManager.Instance.Bot is not null)
                 BotManager.Instance.Bot.TurnOver -= Bot_TurnOver;
         }
+        public void Refresh()
+        {
+            foreach(var tile in game.Positions)
+            {
+                var uiTile = tiles?[tile.Coords.X, tile.Coords.Y];
+                if (uiTile is null)
+                        continue;
+
+                var uiButton = uiTile.btnControl;
+                var image = tile.Owner is TileOwner.Unclaimed ? null : (ImageSource)ActiveTheme.ResDict[tile.Owner is TileOwner.Player1 ? "Player1" : "Player2"];
+                uiTile.UpdateImage(image);
+                uiButton.IsEnabled = tile.Owner is TileOwner.Unclaimed;
+
+            }
+
+        }
 
         private void Bot_TurnOver(object sender, AI.EventArgs.TurnOverEventArgs e)
         {
             if (tiles is null) return;
-
-            var tile = tiles[e.TurnTaken.Index];
-            tile.UpdateImage((ImageSource)ActiveTheme.ResDict[e.TurnTaken.Owner is TileOwner.Player1 ? "Player1" : "Player2"]);
-            tile.btnControl.IsEnabled = false;
+            Refresh();
+            GameOver();
+            
+            if(!e.TurnTaken.WinningTile)
             UpdatePlayer();
         }
 
@@ -114,7 +130,8 @@ namespace TicTacToe.UI.Controls
         private void GameOver()
         {
             var winner = game.CheckForWin();//Get the current WinStatus of the game
-            if (winner.Winner is WinResult.WinType.None) return;//If the game is still in progress, do nothing
+            if (game.IsImminentStalemate) OnStalemateImminent();
+            if (winner.Winner is WinResult.WinType.None || game.Positions.Cast<Tile>().Where(tile => tile.Owner is TileOwner.Unclaimed).Any()) return;//If the game is still in progress, do nothing
 
             Cursor = Cursors.Arrow;//Change the cursor back to the normal one as no players are taking a turn
 
@@ -128,7 +145,7 @@ namespace TicTacToe.UI.Controls
         /// <param name="result"></param>
         private void DisplayWinner(WinResult result)
         {
-
+            if(tiles is null) return;
 
             foreach(var tile in tiles)
             {
@@ -137,7 +154,7 @@ namespace TicTacToe.UI.Controls
                 if (result.Winner is WinResult.WinType.Stalemate)
                     tile.imgDisplay.Source = (ImageSource)ActiveTheme.ResDict["Stalemate"];//if the game was a stalemate, fill all tiles with stalemate image
 
-                if (!game.Positions[tile.Index].WinningTile && result.Winner is not WinResult.WinType.Stalemate)
+                if (!game.Positions[tile.Coords.X, tile.Coords.Y].WinningTile && result.Winner is not WinResult.WinType.Stalemate)
                     tile.imgDisplay.Visibility = Visibility.Hidden;//if the game was decisive, show the tiles that make up the win condition
 
             }
@@ -154,15 +171,10 @@ namespace TicTacToe.UI.Controls
         /// <summary>
         /// Process a single turn for specific tile
         /// </summary>
-        /// <param name="img"></param>
-        /// <param name="btn"></param>
-        /// <param name="pos"></param>
         private void TakeTurn(TicTacToeTile tile)
         {
-            game.TakeTurn(player1 ? TileOwner.Player1 : TileOwner.Player2, tile.Index);//process the turn
-            tile.UpdateImage( player1 ? (ImageSource)ActiveTheme.ResDict["Player1"] : (ImageSource)ActiveTheme.ResDict["Player2"]);//set the tile's image to the icon for the current player
-
-            tile.btnControl.IsEnabled = false;//disable the button so that this tile can't be chosen again this game
+            game.TakeTurn(player1 ? TileOwner.Player1 : TileOwner.Player2, tile.Coords);//process the turn
+            Refresh();
             UpdatePlayer();//update who the current player is
             GameOver();//Check for a win condition
             if(game.IsImminentStalemate) 
@@ -171,7 +183,7 @@ namespace TicTacToe.UI.Controls
             OnPlayerTurnOver();
 
             if (BotManager.Instance.Bot is not null)
-                BotManager.Instance.TakeTurn(game, game.Positions[tile.Index]);
+                BotManager.Instance.TakeTurn(game, game.Positions[tile.Coords.X, tile.Coords.Y]);
         }
 
         private void ChangeTheme()
@@ -180,8 +192,8 @@ namespace TicTacToe.UI.Controls
 
             foreach(var tile in tiles)
             {
-                if (game.Positions[tile.Index].Owner is not TileOwner.Unclaimed)
-                    tile.imgDisplay.Source = (ImageSource)ActiveTheme.ResDict[game.Positions[tile.Index].Owner.ToString()];
+                if (game.Positions[tile.Coords.X, tile.Coords.Y].Owner is not TileOwner.Unclaimed)
+                    tile.imgDisplay.Source = (ImageSource)ActiveTheme.ResDict[game.Positions[tile.Coords.X, tile.Coords.Y].Owner.ToString()];
 
                 if (game.CheckForWin().Winner is WinResult.WinType.Stalemate)
                     tile.imgDisplay.Source = (ImageSource)ActiveTheme.ResDict["Stalemate"];
@@ -190,21 +202,21 @@ namespace TicTacToe.UI.Controls
         }
         
 
-        private TicTacToeTile[] GenerateTiles()
+        private TicTacToeTile[,] GenerateTiles()
         {
-            var tiles = new TicTacToeTile[size * size];
+            var tiles = new TicTacToeTile[size,size];
 
-            for(int i = 0; i < tiles.Length; i++)
+            foreach(var tile in game.Positions)
             {
-                var tile = new TicTacToeTile(i, TakeTurn);
+                var uiTile = new TicTacToeTile(tile.Coords, TakeTurn);
+                grdContent.Children.Add(uiTile);
 
-                grdContent.Children.Add(tile);
+                Grid.SetRow(uiTile, tile.Coords.Y);
+                Grid.SetColumn(uiTile, tile.Coords.X);
 
-                Grid.SetRow(tile, i/size);
-                Grid.SetColumn(tile, i%size);
-
-                tiles[i] = tile;
+                tiles[tile.Coords.X, tile.Coords.Y] = uiTile;
             }
+
 
             return tiles;
         }

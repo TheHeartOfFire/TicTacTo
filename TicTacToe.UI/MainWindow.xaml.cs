@@ -96,6 +96,7 @@ public partial class MainWindow : Window
 
     private void menuBadBot_Checked(object sender, RoutedEventArgs e) => SetBot(menuBadBot, new BadBot(menuBotOrderSecond.IsChecked ? TileOwner.Player2 : TileOwner.Player1));
 
+    private void menuNoYouBot_Checked(object sender, RoutedEventArgs e) => SetBot(menuNoYouBot, new NoYouBot(menuBotOrderSecond.IsChecked ? TileOwner.Player2 : TileOwner.Player1));
     private void SetBot(MenuItem selectedItem, ITicTacToeBot? bot)
     {
         if (grdGame is null) return;//omit call from initializing menuNoBot being defaulted to isChecked = true;
@@ -122,4 +123,5 @@ public partial class MainWindow : Window
 
         BotManager.Instance.Bot = BotManager.Instance.Bot?.New(order);
     }
+
 }

@@ -1,7 +1,8 @@
 ﻿using System;
+using static TicTacToe.Core.Tile;
 
 namespace TicTacToe.Core;
-public class Tile(int index): IEquatable<Tile>
+public class Tile(Coordinates coords) : IEquatable<Tile>
 {
     public enum TileOwner
     {
@@ -9,8 +10,13 @@ public class Tile(int index): IEquatable<Tile>
         Player1,
         Player2
     }
+    public struct Coordinates(int x, int y)
+    {
+        public int X = x;
+        public int Y = y;
+    }
     public TileOwner Owner { get{ return _owner; } }
-    public int Index { get; } = index;
+    public Coordinates Coords { get; } = coords;
     public bool WinningTile { get { return _winningTile; } }
 
     private TileOwner _owner = TileOwner.Unclaimed;

@@ -12,6 +12,8 @@ namespace TicTacToe.UI.Controls
     public partial class TicTacToeDisplay : UserControl
     {
         public readonly TicTacToeBoard board;
+        private bool isGameOver = false;
+        private bool isStalemate = false;
 
         public TicTacToeDisplay(int size)
         {
@@ -27,11 +29,13 @@ namespace TicTacToe.UI.Controls
         }
         public void Reset (int? size)
         {
-
+            isGameOver = false;
+            isStalemate = false;
             btnReset.Visibility = Visibility.Hidden;//Hide the reset button. This should only be visible at the end of the game.
 
             lblAlert.Content = "";//This label is only visible at the end of the game.
 
+            board.Reset(size);
             if (BotManager.Instance.Bot is not null)
             {
 
@@ -40,7 +44,6 @@ namespace TicTacToe.UI.Controls
                      || (board.Turn is Tile.TileOwner.Player2 && BotManager.Instance.Bot.Order is Tile.TileOwner.Player2))
                     lblAlert.Content = "Opponent's turn!";
             }
-            board.Reset(size);
         }
 
         public void Dispose()
@@ -71,18 +74,23 @@ namespace TicTacToe.UI.Controls
 
         private void Board_StalemateImminent()
         {
-            lblAlert.Content = "Stalemate!";
+            if(!isStalemate &&!isGameOver)
+            {
+                lblAlert.Content = "Stalemate!";
+                isStalemate = true;
+            }
         }
 
         private void Board_PlayerTurnOver()
         {
-            if (BotManager.Instance.Bot is not null)
+            if (BotManager.Instance.Bot is not null && !isGameOver && !isStalemate)
                 lblAlert.Content = "Opponent's turn!";
         }
 
         private void Bot_TurnOver(object sender, AI.EventArgs.TurnOverEventArgs e)
         {
-            lblAlert.Content = "Your turn!";
+            if (!isGameOver && !isStalemate)
+                lblAlert.Content = "Your turn!";
         }
 
         private void Instance_BotChanged()
@@ -97,16 +105,25 @@ namespace TicTacToe.UI.Controls
                      || (board.Turn is Tile.TileOwner.Player2 && BotManager.Instance.Bot.Order is Tile.TileOwner.Player2))
                     lblAlert.Content = "Opponent's turn!";
             }
+
+            if (BotManager.Instance.Bot is null) Reset(null);
         }
 
         private void TicTacToeBoard_GameEnded(object sender, GameOverEventArgs e)
         {
-            lblAlert.Content = "Winner!";
+            //If the game was decisive, Tell the player there was a winner, otherwise, tell them it was a stalemate.
+            isGameOver = true;
 
-            if (e.Result.Winner is WinResult.WinType.Stalemate)//If the game was decisive, Tell the player there was a winner, otherwise, tell them it was a stalemate.
+            if(e.Result.Winner is WinResult.WinType.Stalemate || isStalemate)
+            {
                 lblAlert.Content = "Stalemate!";
+                isStalemate = true;
+            }
 
-            if (BotManager.Instance.Bot is not null)
+            if (BotManager.Instance.Bot is null && !isStalemate)
+                lblAlert.Content = "Winner!";
+
+            if (BotManager.Instance.Bot is not null && !isStalemate)
             {
                 lblAlert.Content = "You Win!";
                 if (    (e.Result.Winner is WinResult.WinType.Player1 && BotManager.Instance.Bot.Order is Tile.TileOwner.Player1) 
