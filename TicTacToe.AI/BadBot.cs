@@ -36,7 +36,7 @@ public class BadBot : ITicTacToeBot
     private event TurnOverEventHandler? turnOver;
     protected virtual void OnTurnOver(TurnOverEventArgs e) => turnOver?.Invoke(this, e);
     private TileOwner _order;
-    private Random _random;
+    private Random _random = new();
 
     public Board TakeTurn(Board game, Tile? tilePlayed) => PickTile(game);
     public ITicTacToeBot New(TileOwner order) => new BadBot(order);
@@ -46,7 +46,6 @@ public class BadBot : ITicTacToeBot
     {
         if(order is TileOwner.Unclaimed) throw new ArgumentException("Order cannot be TileOwner.Unclaimed. Use TileOwner.Player1 or TileOwner.Player2");
         _order = order;
-        _random = new Random();
     }
     /// <summary>
     /// Chooses a random unclaimed tile and plays it as the bot's turn.
@@ -56,12 +55,19 @@ public class BadBot : ITicTacToeBot
     private Board PickTile(Board game)
     {
         //get all of the unclaimed tiles
-        var unclaimedTiles = game.Positions.Where(tile => tile.Owner is TileOwner.Unclaimed).ToList();
-        if (unclaimedTiles.Count <= 0) return game;
+        var unclaimedTiles = (from Tile tile in game.Positions
+                              where tile.Owner is TileOwner.Unclaimed
+                              select tile).ToList(); ;
+        if (unclaimedTiles.Count == 0) return game;
+        if (unclaimedTiles.Count == 1)//if there's only 1 option, play it
+        {
+            game.TakeTurn(Order, unclaimedTiles[0].Coords);
+            return game;
+        }
         //pick one at random
-        var selectedTile = unclaimedTiles[_random.Next(0, unclaimedTiles.Count())];
+        var selectedTile = unclaimedTiles[_random.Next(0, unclaimedTiles.Count)];
 
-        game.TakeTurn(Order, selectedTile.Index);
+        game.TakeTurn(Order, selectedTile.Coords);
         OnTurnOver(new TurnOverEventArgs(selectedTile));
         return game;
     }

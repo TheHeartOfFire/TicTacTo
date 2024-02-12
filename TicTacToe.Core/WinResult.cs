@@ -3,7 +3,7 @@ using System.Linq;
 using static TicTacToe.Core.Tile;
 
 namespace TicTacToe.Core;
-public class WinResult(Tile[] board)
+public class WinResult(Tile[,] board, bool stalemate = false)
 {
     public enum WinType
     {
@@ -13,15 +13,15 @@ public class WinResult(Tile[] board)
         Stalemate
     }
     //Get the indicies for all winning tiles.
-    public List<int> WinningTileIndicies 
+    public List<Coordinates> WinningTileIndicies 
     { 
         get
         {
-            List<int> tiles = [];
+            List<Coordinates> tiles = [];
 
             foreach (var tile in board)
                 if (tile.WinningTile)
-                    tiles.Add(tile.Index);
+                    tiles.Add(tile.Coords);
             return tiles;
         } 
     }
@@ -30,12 +30,15 @@ public class WinResult(Tile[] board)
     {
         get
         {
+            if (stalemate) return WinType.Stalemate;
             //check for an outright winner
             foreach (var tile in board)
                 if (tile.WinningTile)
                     return ConvertTileOwnerToWinType(tile.Owner);
             //check for an incomplete game
-            if (board.Where(tile => tile.Owner is TileOwner.Unclaimed).Any()) return WinType.None;
+            if ((from tile in board.Cast<Tile>()
+                 where tile.Owner is TileOwner.Unclaimed
+                 select tile).Any()) return WinType.None;
 
             return WinType.Stalemate;
         }
@@ -44,8 +47,10 @@ public class WinResult(Tile[] board)
     public List<Tile> WinningTiles 
     { 
         get 
-        { 
-            return board.Where(tile => tile.WinningTile).ToList(); 
+        {
+            return (from tile in board.Cast<Tile>()
+                    where tile.WinningTile
+                    select tile).ToList(); 
         } 
     }
 

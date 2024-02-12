@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Linq;
+using static TicTacToe.Core.Tile;
 
 namespace TicTacToe.Core;
-public class WinCondition(int[] positions)
+public class WinCondition(Coordinates[] positions)
 {
     public static WinCondition[] WinConditions { get; private set; }
-    public int[] Positions { get { return positions; } }
+    public Coordinates[] Positions { get { return positions; } }
     public bool IsPossible { get; private set; } = true;
-    private readonly int[] positions = positions;
+    private readonly Coordinates[] positions = positions;
 
     /// <summary>
     /// Check each win condition against the current state of the board and mark impossible conditions appropriately.
     /// </summary>
     /// <param name="board">The current board state</param>
-    internal static void TrimImpossibleConditions(Tile[] board)
+    internal static void TrimImpossibleConditions(Tile[,] board)
     {
         foreach(var condition in WinConditions)
             condition.CheckIfPossible(board);
@@ -43,32 +44,32 @@ public class WinCondition(int[] positions)
         int counter = 0;
 
         //initialize diagonals
-        winConditions[winConditions.Length - 1] = new WinCondition(new int[size]);
-        winConditions[winConditions.Length - 2] = new WinCondition(new int[size]);
-        // Board        Desired    Equation
+        winConditions[^1] = new WinCondition(new Coordinates[size]);
+        winConditions[^2] = new WinCondition(new Coordinates[size]);
+        // Board        Desired    Coords
         // 0 | 1 | 2    0, 1, 2    i = row                     |
         // 3 | 4 | 5 => 3, 4, 5 => j = col                     | Rows
-        // 6 | 7 | 8    6, 7, 8    (i * size) + j              |
+        // 6 | 7 | 8    6, 7, 8    i, j                        |
         //-----------------------------------------------------|
-        // 0 | 1 | 2    0, 3, 6    i = col                     |
-        // 3 | 4 | 5 => 1, 4, 7 => j = row                     | Columns
-        // 6 | 7 | 8    2, 5, 8    i + (j * size)              |
+        // 0 | 1 | 2    0, 3, 6    i = row                     |
+        // 3 | 4 | 5 => 1, 4, 7 => j = col                     | Columns
+        // 6 | 7 | 8    2, 5, 8    j, i                        |
         //-----------------------------------------------------|
-        // 0 | 1 | 2    0, 4, 8    (i * size) + i              | back diagonal
+        // 0 | 1 | 2    0, 4, 8    i, i                        | back diagonal
         // 3 | 4 | 5 =>         =>                             |
-        // 6 | 7 | 8    6, 4, 2    (size * i) + (size - 1 - i) | front diagonal
+        // 6 | 7 | 8    6, 4, 2    i, (size - 1 - i)           | front diagonal
         for (int i = 0; i < size; i++)
         {
-            winConditions[counter] = new WinCondition(new int[size]);
-            winConditions[counter+1] = new WinCondition(new int[size]);
+            winConditions[counter] = new WinCondition(new Coordinates[size]);
+            winConditions[counter+1] = new WinCondition(new Coordinates[size]);
             for (int j = 0; j < size; j++)
             {
-                winConditions[counter].Positions[j] = (i * size) + j;//row
-                winConditions[counter+1].Positions[j] = i + (j * size);//col
+                winConditions[counter].Positions[j] = new(j,i);//row
+                winConditions[counter+1].Positions[j] = new(i,j);//col
             }
             counter+=2;
-            winConditions[winConditions.Length-1].Positions[i] = (i * size) + i;//back diagonal
-            winConditions[winConditions.Length-2].Positions[i] = (size * i) + (size - 1 - i);//front diagonal
+            winConditions[^1].Positions[i] = new(i, i);//back diagonal
+            winConditions[^2].Positions[i] = new(i , (size - 1 - i));//front diagonal
         }
 
         WinConditions = winConditions;
@@ -78,12 +79,14 @@ public class WinCondition(int[] positions)
     /// Check to see if this win condition isstill a viable option
     /// </summary>
     /// <param name="board">The board to check the win condition against.</param>
-    internal void CheckIfPossible(Tile[] board)
+    internal void CheckIfPossible(Tile[,] board)
     {
         //don't bother checking conditions that are already impossible
         if(!IsPossible) return;
 
-        var relevantTiles = board.Where(tile => positions.Contains(tile.Index)).ToList();
+        var relevantTiles = from tile in board.Cast<Tile>()
+                            where positions.Contains(tile.Coords)
+                            select tile;//board.Where(tile => positions.Contains(tile.Index)).ToList();
 
         //Any win condition that contains a tile claimed by both players cannot be a valid win condition
         var player2ClaimedATile = relevantTiles.Where(tile => tile.Owner is Tile.TileOwner.Player2).Any();

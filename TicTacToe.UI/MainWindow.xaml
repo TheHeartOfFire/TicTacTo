@@ -30,6 +30,7 @@
                 <RibbonSplitMenuItem/>
                 <MenuItem x:Name="menuNoBot" Header="_None" IsChecked="True" IsCheckable="True" Checked="menuNoBot_Checked"/>
                 <MenuItem x:Name="menuBadBot" Header="_Easy(Random)" Checked="menuBadBot_Checked" IsCheckable="True"/>
+                <MenuItem x:Name="menuNoYouBot" Header="_Intermediate(Opposite)" IsCheckable="True" Checked="menuNoYouBot_Checked"/>
             </MenuItem>
             <MenuItem Header="T_ools" FontFamily="Comic Sans MS">
                 <MenuItem x:Name="menuCoinToss" Header="Whose first?" Click="menuCoinToss_Click"/>

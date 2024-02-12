@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using TicTacToe.Core;
 using Xunit;
 using static TicTacToe.Core.Tile;
@@ -75,9 +76,11 @@ namespace TicTacToe.Testing
             for (int i = 0; i < owner.Length; i++)
             {
                 if (owner[i] is not TileOwner.Unclaimed)
-                _sut.TakeTurn(owner[i], i);
+                _sut.TakeTurn(owner[i], new(
+                    (int)Math.Floor(i/(float)size), 
+                    i % size));
             }
-            var actual = _sut.CheckForWin();
+            var actual = _sut.CheckForWin(true);
             Assert.Equal(expected, actual.Winner);
 
         }
